@@ -107,67 +107,191 @@ const slides = [
   },
   {
     label: "Market",
-    content: () => (
-      <SlideShell badge="Target Market" title="Four Segments. One Platform." subtitle="~130M U.S. households · $95.7B digital education market by 2030 (CAGR 24.2%)" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#130a1e)">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-          {[
-            { emoji: "🧒", age: "Ages 8–12", label: "Digital Beginners", pain: "Can't distinguish credible from false — yet highly confident", solution: "Gamified classroom modules · 25 states have media literacy laws", color: GREEN },
-            { emoji: "📱", age: "Ages 13–17", label: "Overconfident Natives", pain: "Worst generation at detecting misinformation (66K-person global study)", solution: "Viral content evaluation · Social media-native browser extension", color: ACCENT },
-            { emoji: "💼", age: "Ages 18–64", label: "Professionals & Parents", pain: "52% can't tell true from false news · 60% of breaches = human error", solution: "Phishing simulators · Corporate training · Family dashboard", color: AMBER },
-            { emoji: "👴", age: "Ages 65+", label: "High-Stakes, Underserved", pain: "$4.8B lost to AI scams · Only 26% confident spotting misinformation", solution: "Simplified alerts · Large-text UI · Family safety monitoring", color: DANGER },
-          ].map(({ emoji, age, label, pain, solution, color }) => (
-            <div key={label} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${color}33`, borderRadius: 12, padding: "14px 16px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                <span style={{ fontSize: 24 }}>{emoji}</span>
-                <div>
-                  <p style={{ color, fontWeight: 700, fontSize: 14, margin: 0, lineHeight: 1 }}>{label}</p>
-                  <p style={{ color: "#334155", fontSize: 10, margin: 0 }}>{age}</p>
+    content: () => {
+      const segCards = [
+        // Kids - tablet scene
+        <svg key="kid" viewBox="0 0 160 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="160" height="120" fill="#1a3a2a"/>
+          <rect x="0" y="70" width="160" height="50" fill="#0f2d1a"/>
+          <rect x="0" y="82" width="160" height="8" rx="2" fill="#5c3d1e"/>
+          <rect x="52" y="58" width="56" height="36" rx="10" fill="#c0392b"/>
+          <rect x="30" y="75" width="28" height="12" rx="6" fill="#c0392b"/>
+          <rect x="102" y="75" width="28" height="12" rx="6" fill="#c0392b"/>
+          <ellipse cx="44" cy="83" rx="8" ry="6" fill="#f5cba7"/>
+          <ellipse cx="116" cy="83" rx="8" ry="6" fill="#f5cba7"/>
+          <rect x="72" y="46" width="16" height="14" rx="4" fill="#f5cba7"/>
+          <ellipse cx="80" cy="36" rx="22" ry="24" fill="#f5cba7"/>
+          <ellipse cx="80" cy="16" rx="22" ry="10" fill="#3b1f0a"/>
+          <ellipse cx="60" cy="26" rx="8" ry="14" fill="#3b1f0a"/>
+          <ellipse cx="100" cy="26" rx="8" ry="14" fill="#3b1f0a"/>
+          <ellipse cx="73" cy="36" rx="3.5" ry="2.5" fill="#3b1f0a"/>
+          <ellipse cx="87" cy="36" rx="3.5" ry="2.5" fill="#3b1f0a"/>
+          <rect x="42" y="68" width="76" height="52" rx="5" fill="#c0392b"/>
+          <rect x="46" y="72" width="68" height="44" rx="3" fill="#1a1a2e"/>
+          <rect x="48" y="74" width="64" height="40" rx="2" fill="#3498db" opacity="0.8"/>
+          <rect x="52" y="78" width="30" height="4" rx="2" fill="white" opacity="0.6"/>
+          <rect x="52" y="86" width="45" height="3" rx="1" fill="white" opacity="0.4"/>
+          <ellipse cx="88" cy="108" rx="5" ry="4" fill="#f5cba7"/>
+        </svg>,
+        // Teen - phone scene
+        <svg key="teen" viewBox="0 0 160 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="160" height="120" fill="#1a1a2e"/>
+          <rect x="0" y="88" width="160" height="32" rx="8" fill="#2c3e6b"/>
+          <rect x="0" y="88" width="160" height="10" rx="5" fill="#34498a"/>
+          <rect x="20" y="72" width="90" height="30" rx="12" fill="#ffffff"/>
+          <ellipse cx="122" cy="76" rx="20" ry="22" fill="#fde8d0"/>
+          <ellipse cx="122" cy="58" rx="20" ry="10" fill="#d4a843"/>
+          <rect x="102" y="56" width="8" height="30" rx="4" fill="#d4a843"/>
+          <rect x="132" y="56" width="8" height="30" rx="4" fill="#d4a843"/>
+          <ellipse cx="116" cy="74" rx="3" ry="3.5" fill="#2c3e50"/>
+          <ellipse cx="128" cy="74" rx="3" ry="3.5" fill="#2c3e50"/>
+          <path d="M114 82 Q122 88 130 82" stroke="#c0392b" strokeWidth="2" fill="none" strokeLinecap="round"/>
+          <circle cx="104" cy="76" r="4" fill="#95a5a6"/>
+          <path d="M104 76 Q108 68 116 66" stroke="#95a5a6" strokeWidth="1.5" fill="none"/>
+          <rect x="30" y="68" width="55" height="38" rx="5" fill="#2c3e50"/>
+          <rect x="33" y="71" width="49" height="32" rx="3" fill="#ecf0f1"/>
+          <rect x="35" y="73" width="45" height="28" rx="2" fill="#74b9ff"/>
+          <circle cx="57" cy="87" r="8" fill="#0984e3" opacity="0.7"/>
+          <polygon points="54,83 54,91 63,87" fill="white"/>
+        </svg>,
+        // Professional - outdoors
+        <svg key="pro" viewBox="0 0 160 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="160" height="120" fill="#b8d4e8"/>
+          <rect x="0" y="60" width="160" height="60" fill="#c5daea"/>
+          <rect x="110" y="10" width="50" height="80" fill="#d6e8f5" opacity="0.6"/>
+          <rect x="120" y="20" width="8" height="10" rx="1" fill="#a8c8df" opacity="0.8"/>
+          <rect x="132" y="20" width="8" height="10" rx="1" fill="#a8c8df" opacity="0.8"/>
+          <rect x="42" y="62" width="60" height="58" rx="10" fill="#1a1a2e"/>
+          <polygon points="72,62 62,80 72,78" fill="#2c3e7a"/>
+          <polygon points="88,62 98,80 88,78" fill="#2c3e7a"/>
+          <rect x="72" y="62" width="16" height="20" fill="#ecf0f1"/>
+          <rect x="72" y="48" width="16" height="16" rx="4" fill="#fde0c0"/>
+          <ellipse cx="80" cy="36" rx="22" ry="24" fill="#fde0c0"/>
+          <ellipse cx="80" cy="16" rx="22" ry="10" fill="#c9a227"/>
+          <ellipse cx="60" cy="26" rx="7" ry="16" fill="#c9a227"/>
+          <ellipse cx="100" cy="26" rx="7" ry="16" fill="#c9a227"/>
+          <ellipse cx="73" cy="34" rx="3" ry="3.2" fill="#2c3e50"/>
+          <ellipse cx="87" cy="34" rx="3" ry="3.2" fill="#2c3e50"/>
+          <path d="M73 42 Q80 47 87 42" stroke="#c0392b" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
+          <rect x="88" y="52" width="22" height="38" rx="4" fill="#1a1a2e"/>
+          <rect x="90" y="55" width="18" height="30" rx="2" fill="#3498db"/>
+          <rect x="92" y="58" width="14" height="3" rx="1" fill="white" opacity="0.7"/>
+          <rect x="92" y="64" width="10" height="2" rx="1" fill="white" opacity="0.5"/>
+          <rect x="36" y="72" width="14" height="30" rx="7" fill="#1a1a2e"/>
+          <ellipse cx="42" cy="102" rx="9" ry="7" fill="#fde0c0"/>
+        </svg>,
+        // Senior couple
+        <svg key="senior" viewBox="0 0 160 120" width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
+          <rect width="160" height="120" fill="#f0e6d3"/>
+          <rect x="0" y="82" width="160" height="38" rx="10" fill="#c9956c"/>
+          <rect x="0" y="82" width="160" height="12" rx="6" fill="#d4a574"/>
+          <rect x="0" y="82" width="30" height="38" rx="8" fill="#d4a574"/>
+          <rect x="130" y="82" width="30" height="38" rx="8" fill="#d4a574"/>
+          <rect x="12" y="60" width="50" height="48" rx="10" fill="#7fb3d3"/>
+          <rect x="30" y="46" width="14" height="16" rx="4" fill="#f5cba7"/>
+          <ellipse cx="37" cy="34" rx="20" ry="22" fill="#f5cba7"/>
+          <ellipse cx="37" cy="14" rx="18" ry="9" fill="#ecf0f1"/>
+          <ellipse cx="20" cy="24" rx="7" ry="14" fill="#ecf0f1"/>
+          <ellipse cx="54" cy="24" rx="6" ry="12" fill="#ecf0f1"/>
+          <ellipse cx="31" cy="32" rx="3" ry="3.2" fill="#2c3e50"/>
+          <ellipse cx="43" cy="32" rx="3" ry="3.2" fill="#2c3e50"/>
+          <path d="M29 40 Q37 46 45 40" stroke="#c0392b" strokeWidth="2" fill="none" strokeLinecap="round"/>
+          <ellipse cx="37" cy="46" rx="14" ry="6" fill="#bdc3c7"/>
+          <rect x="90" y="56" width="56" height="52" rx="10" fill="#7fb8a0"/>
+          <rect x="50" y="66" width="50" height="12" rx="6" fill="#7fb8a0"/>
+          <rect x="108" y="42" width="14" height="16" rx="4" fill="#fde0c0"/>
+          <ellipse cx="115" cy="30" rx="20" ry="22" fill="#fde0c0"/>
+          <ellipse cx="115" cy="12" rx="19" ry="9" fill="#c9b99a"/>
+          <ellipse cx="97" cy="22" rx="7" ry="14" fill="#c9b99a"/>
+          <circle cx="109" cy="28" r="5" fill="none" stroke="#7f8c8d" strokeWidth="1.5"/>
+          <circle cx="121" cy="28" r="5" fill="none" stroke="#7f8c8d" strokeWidth="1.5"/>
+          <line x1="114" y1="28" x2="116" y2="28" stroke="#7f8c8d" strokeWidth="1.5"/>
+          <ellipse cx="109" cy="28" rx="2.5" ry="2.5" fill="#2c3e50"/>
+          <ellipse cx="121" cy="28" rx="2.5" ry="2.5" fill="#2c3e50"/>
+          <path d="M107 38 Q115 44 123 38" stroke="#c0392b" strokeWidth="2" fill="none" strokeLinecap="round"/>
+          <rect x="126" y="48" width="20" height="34" rx="4" fill="#2c3e50"/>
+          <rect x="128" y="51" width="16" height="26" rx="2" fill="#1abc9c"/>
+          <rect x="130" y="54" width="12" height="3" rx="1" fill="white" opacity="0.8"/>
+          <ellipse cx="148" cy="30" rx="10" ry="20" fill="#27ae60" opacity="0.5"/>
+        </svg>,
+      ];
+      const segments = [
+        { age: "Ages 8–12", label: "Digital Beginners", pain: "Can't distinguish credible info from falsehood", solution: "Gamified modules · 25 states have media literacy laws", color: "#34d399" },
+        { age: "Ages 13–17", label: "Overconfident Natives", pain: "Worst at detecting misinformation of any generation", solution: "Browser extension · Viral content evaluation", color: ACCENT },
+        { age: "Ages 18–64", label: "Professionals & Parents", pain: "52% can't tell true from false news", solution: "Corporate training · Family dashboard", color: AMBER },
+        { age: "Ages 65+", label: "High-Stakes, Underserved", pain: "$4.8B lost to fraud annually", solution: "Large-text interface · Family monitoring", color: DANGER },
+      ];
+      return (
+        <SlideShell badge="Target Market" title="Four Segments. One Platform." subtitle="~130M U.S. households · $95.7B digital education market by 2030 (CAGR 24.2%)" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#130a1e)">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
+            {segments.map((s, i) => (
+              <div key={s.label} style={{ background: "rgba(255,255,255,0.04)", borderRadius: 12, overflow: "hidden", border: `1px solid ${s.color}44`, display: "flex", flexDirection: "column" }}>
+                <div style={{ position: "relative", height: 120, overflow: "hidden" }}>
+                  {segCards[i]}
+                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, transparent 45%, rgba(0,0,0,0.75) 100%)" }} />
+                  <div style={{ position: "absolute", bottom: 8, left: 10 }}>
+                    <span style={{ color: "#fff", fontWeight: 700, fontSize: 13, textShadow: "0 1px 4px rgba(0,0,0,0.9)", display: "block" }}>{s.label}</span>
+                    <span style={{ color: "rgba(255,255,255,0.75)", fontSize: 10 }}>{s.age}</span>
+                  </div>
+                </div>
+                <div style={{ padding: "10px 12px", flex: 1 }}>
+                  <p style={{ color: "#f87171", fontSize: 11, margin: "0 0 6px", lineHeight: 1.4 }}>⚠️ {s.pain}</p>
+                  <p style={{ color: `${s.color}cc`, fontSize: 11, margin: 0, lineHeight: 1.4 }}>✅ {s.solution}</p>
                 </div>
               </div>
-              <p style={{ color: "#64748b", fontSize: 11, margin: "0 0 6px" }}>⚠️ {pain}</p>
-              <p style={{ color: "#94a3b8", fontSize: 11, margin: 0 }}>✅ {solution}</p>
-            </div>
-          ))}
-        </div>
-      </SlideShell>
-    )
+            ))}
+          </div>
+          <div style={{ marginTop: 12, background: "rgba(167,139,250,0.08)", borderRadius: 10, padding: "8px 16px", border: "1px solid rgba(167,139,250,0.2)" }}>
+            <p style={{ color: "#c4b5fd", fontSize: 12, margin: 0, textAlign: "center" }}>📊 TAM: ~130M U.S. households · Digital education market projected at $95.7B by 2030 (CAGR 24.2%)</p>
+          </div>
+        </SlideShell>
+      );
+    }
   },
   {
     label: "Competition",
-    content: () => (
-      <SlideShell badge="Competitive Landscape" title="No One Does What We Do" subtitle="Every competitor solves a fragment. TruthLens solves the whole." accent={AMBER} bg="linear-gradient(160deg,#0a0f1e,#1a1200)">
-        <div style={{ overflowX: "auto", marginBottom: 12 }}>
-          <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: "0 5px", fontSize: 12 }}>
+    content: () => {
+      const Check = () => <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, background: "#16a34a", fontSize: 14 }}>✓</span>;
+      const Cross = () => <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, borderRadius: 6, background: "#dc2626", fontSize: 13, fontWeight: 900, color: "white" }}>✕</span>;
+      const rows = [
+        { name: "Snopes / PolitiFact",  aud: "Adults only",      edu: true,  detect: false, fam: false, ages: false, hl: false },
+        { name: "Common Sense Media",   aud: "Kids & Parents",   edu: true,  detect: false, fam: false, ages: false, hl: false },
+        { name: "News Literacy Project",aud: "Students only",    edu: true,  detect: false, fam: false, ages: false, hl: false },
+        { name: "GPTZero / Copyleaks",  aud: "B2B / Academic",   edu: false, detect: true,  fam: false, ages: false, hl: false },
+        { name: "FactFlow",             aud: "Journalists only", edu: false, detect: true,  fam: false, ages: false, hl: false },
+        { name: "🔍 TruthLens",         aud: "All Ages (8–65+)", edu: true,  detect: true,  fam: true,  ages: true,  hl: true  },
+      ];
+      return (
+        <SlideShell badge="Competitive Landscape" title="No One Does What We Do" subtitle="Every competitor solves a fragment. TruthLens solves the whole." accent={AMBER} bg="linear-gradient(160deg,#0a0f1e,#1a1200)">
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
-              <tr>
+              <tr style={{ borderBottom: "1px solid #334155" }}>
                 {["Platform", "Audience", "Education", "AI Detection", "Family Dashboard", "All Ages"].map(h => (
-                  <th key={h} style={{ color: "#475569", fontWeight: 600, textAlign: "left", padding: "4px 10px", borderBottom: "1px solid #1e293b", fontSize: 11 }}>{h}</th>
+                  <th key={h} style={{ color: "#64748b", fontWeight: 600, textAlign: h === "Platform" || h === "Audience" ? "left" : "center", padding: "6px 10px", fontSize: 11 }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {[
-                { name: "Snopes / PolitiFact", aud: "Adults only", edu: "✅", ai: "❌", fam: "❌", all: "❌", hl: false },
-                { name: "Common Sense Media", aud: "Kids & Parents", edu: "✅", ai: "❌", fam: "❌", all: "❌", hl: false },
-                { name: "News Literacy Project", aud: "Students only", edu: "✅", ai: "❌", fam: "❌", all: "❌", hl: false },
-                { name: "GPTZero / Copyleaks", aud: "B2B / Academic", edu: "❌", ai: "✅", fam: "❌", all: "❌", hl: false },
-                { name: "FactFlow", aud: "Journalists only", edu: "❌", ai: "✅", fam: "❌", all: "❌", hl: false },
-                { name: "🔍 TruthLens", aud: "All Ages (8–65+)", edu: "✅", ai: "✅", fam: "✅", all: "✅", hl: true },
-              ].map(({ name, aud, edu, ai, fam, all, hl }) => (
-                <tr key={name} style={{ background: hl ? "rgba(56,189,248,0.07)" : "rgba(255,255,255,0.02)" }}>
-                  {[name, aud, edu, ai, fam, all].map((v, i) => (
-                    <td key={i} style={{ padding: "8px 10px", color: hl ? (i < 2 ? "#38bdf8" : "white") : (i < 2 ? "#94a3b8" : "#475569"), fontWeight: hl && i === 0 ? 700 : 400, fontSize: i >= 2 ? 15 : 12, border: hl ? (i === 0 ? "1px solid rgba(56,189,248,0.2)" : "1px solid transparent") : "none", borderLeft: hl && i === 0 ? "3px solid #38bdf8" : undefined }}>{v}</td>
-                  ))}
+              {rows.map((row) => (
+                <tr key={row.name} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", background: row.hl ? "rgba(56,189,248,0.07)" : "transparent" }}>
+                  <td style={{ padding: "9px 10px", borderLeft: row.hl ? "3px solid #38bdf8" : "3px solid transparent" }}>
+                    <span style={{ color: row.hl ? "#38bdf8" : "#e2e8f0", fontWeight: row.hl ? 700 : 400, fontSize: 12 }}>{row.name}</span>
+                  </td>
+                  <td style={{ padding: "9px 10px", color: "#94a3b8", fontSize: 12 }}>{row.aud}</td>
+                  <td style={{ padding: "9px 10px", textAlign: "center" }}>{row.edu ? <Check /> : <Cross />}</td>
+                  <td style={{ padding: "9px 10px", textAlign: "center" }}>{row.detect ? <Check /> : <Cross />}</td>
+                  <td style={{ padding: "9px 10px", textAlign: "center" }}>{row.fam ? <Check /> : <Cross />}</td>
+                  <td style={{ padding: "9px 10px", textAlign: "center" }}>{row.ages ? <Check /> : <Cross />}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-        <div style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.25)", borderRadius: 10, padding: "10px 16px" }}>
-          <p style={{ color: "#fde68a", fontSize: 13, margin: 0, textAlign: "center" }}>🏆 TruthLens is the <strong>only platform</strong> combining all-age education + real-time AI detection + family dashboard under one roof</p>
-        </div>
-      </SlideShell>
-    )
+          <div style={{ background: "rgba(251,191,36,0.08)", border: "1px solid rgba(251,191,36,0.25)", borderRadius: 10, padding: "10px 16px", marginTop: 12 }}>
+            <p style={{ color: "#fde68a", fontSize: 13, margin: 0, textAlign: "center" }}>🏆 TruthLens is the <strong>only platform</strong> combining all-age education + real-time AI detection + family dashboard under one roof</p>
+          </div>
+        </SlideShell>
+      );
+    }
   },
   {
     label: "Business Model",
