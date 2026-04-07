@@ -175,6 +175,7 @@ const slides = [
       <SlideShell badge="Business Model" title="Freemium + B2B2C Hybrid" subtitle="Free tier drives adoption · Five revenue streams diversify from day one" accent={GREEN} bg="linear-gradient(160deg,#0a0f1e,#071a0f)">
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
           {[
+            { n: "🆓", title: "Free Tier", detail: "$0 · 1 age group module + browser extension limited to 10 scans/day · Conversion funnel into paid plans", tag: "Always On", color: "#94a3b8" },
             { n: "01", title: "Individual & Family Subscriptions", detail: "$7.99/mo individual · $14.99/mo family (6 accounts)", tag: "Year 1 · Primary", color: GREEN },
             { n: "02", title: "School & District Licensing", detail: "~$3/student/year · Policy-driven demand from 25 states with media literacy mandates", tag: "Year 2", color: ACCENT },
             { n: "03", title: "Enterprise Training (B2B)", detail: "~$15/employee/year · Phishing simulators & AI detection for HR & security teams", tag: "Year 2", color: AMBER },
