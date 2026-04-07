@@ -6,6 +6,74 @@ const GREEN = "#4ade80";
 const PURPLE = "#c084fc";
 const AMBER = "#fbbf24";
 
+// ── Persona avatars ───────────────────────────────────────────────────────────
+const KidAvatar = ({ size = 64, color }) => (
+  <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="32" fill={color + "22"} />
+    <ellipse cx="32" cy="22" rx="13" ry="11" fill={color + "99"} />
+    <ellipse cx="17" cy="20" rx="4" ry="5" fill={color + "99"} transform="rotate(-20 17 20)" />
+    <ellipse cx="47" cy="20" rx="4" ry="5" fill={color + "99"} transform="rotate(20 47 20)" />
+    <circle cx="32" cy="34" r="11" fill="#FDDBB4" />
+    <circle cx="28" cy="32" r="1.8" fill="#3d2b1f" />
+    <circle cx="36" cy="32" r="1.8" fill="#3d2b1f" />
+    <path d="M27 37 Q32 41 37 37" stroke="#c0836a" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+    <circle cx="26" cy="35.5" r="2.5" fill="#f4a5a5" opacity="0.45" />
+    <circle cx="38" cy="35.5" r="2.5" fill="#f4a5a5" opacity="0.45" />
+    <path d="M21 64 Q21 53 32 51 Q43 53 43 64Z" fill={color + "55"} />
+  </svg>
+);
+const TeenAvatar = ({ size = 64, color }) => (
+  <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="32" fill={color + "22"} />
+    <ellipse cx="32" cy="21" rx="13" ry="10" fill={color + "99"} />
+    <rect x="19" y="20" width="5" height="14" rx="2.5" fill={color + "99"} />
+    <rect x="40" y="20" width="5" height="14" rx="2.5" fill={color + "99"} />
+    <circle cx="32" cy="33" r="11" fill="#FDDBB4" />
+    <circle cx="28" cy="31" r="1.8" fill="#3d2b1f" />
+    <circle cx="36" cy="31" r="1.8" fill="#3d2b1f" />
+    <path d="M28 36.5 Q32 39 36.5 36" stroke="#c0836a" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+    <rect x="41" y="38" width="7" height="11" rx="1.5" fill={color + "66"} />
+    <path d="M21 64 Q21 53 32 51 Q43 53 43 64Z" fill={color + "55"} />
+  </svg>
+);
+const EmpAvatar = ({ size = 64, color }) => (
+  <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="32" fill={color + "22"} />
+    <ellipse cx="32" cy="21" rx="12" ry="9" fill="#5c3d2e" />
+    <circle cx="32" cy="33" r="11" fill="#FDDBB4" />
+    <rect x="24" y="29" width="7" height="5" rx="2" stroke={color} strokeWidth="1.4" fill="none" />
+    <rect x="33" y="29" width="7" height="5" rx="2" stroke={color} strokeWidth="1.4" fill="none" />
+    <line x1="31" y1="31.5" x2="33" y2="31.5" stroke={color} strokeWidth="1.4" />
+    <circle cx="27.5" cy="31.5" r="1.1" fill="#3d2b1f" />
+    <circle cx="36.5" cy="31.5" r="1.1" fill="#3d2b1f" />
+    <path d="M28 37 Q32 40 36 37" stroke="#c0836a" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+    <path d="M21 64 Q21 53 27 50 L32 54 L37 50 Q43 53 43 64Z" fill={color + "55"} />
+    <path d="M27 50 L32 54 L37 50" stroke={color} strokeWidth="1.2" fill="none" />
+  </svg>
+);
+const SeniorAvatar = ({ size = 64, color }) => (
+  <svg width={size} height={size} viewBox="0 0 64 64" fill="none">
+    <circle cx="32" cy="32" r="32" fill={color + "22"} />
+    <ellipse cx="32" cy="21" rx="13" ry="10" fill="#d1d5db" />
+    <ellipse cx="18" cy="24" rx="4" ry="6" fill="#d1d5db" transform="rotate(-10 18 24)" />
+    <ellipse cx="46" cy="24" rx="4" ry="6" fill="#d1d5db" transform="rotate(10 46 24)" />
+    <ellipse cx="32" cy="34" rx="12" ry="11" fill="#F2C9A0" />
+    <circle cx="28" cy="32.5" r="1.6" fill="#3d2b1f" />
+    <circle cx="36" cy="32.5" r="1.6" fill="#3d2b1f" />
+    <path d="M27 38 Q32 42 37 38" stroke="#c0836a" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+    <circle cx="25" cy="36" r="3" fill="#f4a5a5" opacity="0.38" />
+    <circle cx="39" cy="36" r="3" fill="#f4a5a5" opacity="0.38" />
+    <path d="M20 64 Q20 53 32 51 Q44 53 44 64Z" fill={color + "55"} />
+  </svg>
+);
+
+const PERSONAS = [
+  { Av: KidAvatar,    color: "#34d399", who: "Students",  age: "Ages 8–12"  },
+  { Av: TeenAvatar,   color: "#60a5fa", who: "Teenagers", age: "Ages 13–17" },
+  { Av: EmpAvatar,    color: "#f59e0b", who: "Employees", age: "Ages 18–64" },
+  { Av: SeniorAvatar, color: "#f87171", who: "Seniors",   age: "Ages 65+"   },
+];
+
 const Tag = ({ label, color }) => (
   <span style={{ background: `${color}22`, color, border: `1px solid ${color}44`, borderRadius: 20, padding: "2px 10px", fontSize: 10, fontWeight: 700, letterSpacing: 0.5 }}>{label}</span>
 );
@@ -25,84 +93,127 @@ const slides = [
   {
     label: "Cover",
     content: () => (
-      <div style={{ height: "100%", background: "linear-gradient(135deg,#020817 0%,#0c1a35 50%,#0e3554 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "36px 48px", position: "relative", overflow: "hidden" }}>
-        {/* bg glow */}
-        <div style={{ position: "absolute", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle,rgba(56,189,248,0.08),transparent 70%)", top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
-        <div style={{ background: "linear-gradient(135deg,#0ea5e9,#6366f1)", borderRadius: 20, width: 72, height: 72, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 34, marginBottom: 20, boxShadow: "0 8px 32px rgba(14,165,233,0.4)" }}>🔍</div>
-        <h1 style={{ color: "white", fontWeight: 900, fontSize: 48, letterSpacing: -2, margin: "0 0 8px" }}>TruthLens</h1>
-        <p style={{ color: "#7dd3fc", fontSize: 16, fontStyle: "italic", margin: "0 0 24px", fontWeight: 300 }}>"One Platform. Every Age. Smarter Media for Everyone."</p>
-        <Divider color="rgba(255,255,255,0.08)" />
-        <p style={{ color: "#475569", fontSize: 13, margin: "16px 0 20px" }}>Combating Misinformation in the Digital Age</p>
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 8, marginBottom: 24 }}>
-          {["CEO","CTO","CPO","CMO","CFO"].map(r => (
-            <span key={r} style={{ background: "rgba(56,189,248,0.08)", color: "#bae6fd", border: "1px solid rgba(56,189,248,0.2)", borderRadius: 20, padding: "4px 14px", fontSize: 12 }}>{r}</span>
+      <div style={{ minHeight: 500, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "40px 52px", background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#0e7490 100%)", position: "relative", overflow: "hidden" }}>
+        {/* Concentric rings */}
+        {[500, 330, 180].map(s => (
+          <div key={s} style={{ position: "absolute", width: s, height: s, borderRadius: "50%", border: `1px solid rgba(125,211,252,${s === 500 ? "0.06" : s === 330 ? "0.09" : "0.14"})`, top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
+        ))}
+        {/* SVG logo */}
+        <svg width="82" height="82" viewBox="0 0 80 80" fill="none" style={{ marginBottom: 14, filter: "drop-shadow(0 0 20px rgba(56,189,248,0.4))" }}>
+          <circle cx="40" cy="40" r="39" stroke="rgba(125,211,252,0.2)" strokeWidth="1.5" />
+          <circle cx="34" cy="34" r="18" fill="rgba(14,116,144,0.3)" stroke="#38bdf8" strokeWidth="2.2" />
+          <circle cx="34" cy="34" r="13" fill="rgba(56,189,248,0.1)" />
+          <path d="M26 34.5 L32 41 L44 27" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+          <line x1="48" y1="48" x2="63" y2="63" stroke="#38bdf8" strokeWidth="4" strokeLinecap="round" />
+          <circle cx="64" cy="64" r="3" fill="#0e7490" />
+          <circle cx="61" cy="20" r="2" fill="#7dd3fc" opacity="0.7" />
+        </svg>
+        <h1 style={{ color: "white", fontWeight: 900, fontSize: 52, letterSpacing: -2, lineHeight: 1, marginBottom: 10 }}>TruthLens</h1>
+        <p style={{ color: "#7dd3fc", fontSize: 16, fontWeight: 600, marginBottom: 24 }}>One platform. Built differently for every person who uses it.</p>
+        {/* Four persona avatars */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 20, marginBottom: 10 }}>
+          {PERSONAS.map(({ Av, color, who, age }) => (
+            <div key={who} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+              <div style={{ borderRadius: "50%", overflow: "hidden", border: `2.5px solid ${color}66`, boxShadow: `0 0 14px ${color}33` }}>
+                <Av size={60} color={color} />
+              </div>
+              <p style={{ color, fontSize: 12, fontWeight: 800 }}>{who}</p>
+              <p style={{ color: "#475569", fontSize: 10 }}>{age}</p>
+            </div>
           ))}
         </div>
-        <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-          <Tag label="INFO 7385" color={ACCENT} />
-          <Tag label="Northeastern University" color={ACCENT} />
-          <Tag label="Spring 2026" color={ACCENT} />
+        <div style={{ width: "60%", height: 1, background: "linear-gradient(90deg,transparent,rgba(56,189,248,0.3),transparent)", marginBottom: 20 }} />
+        {/* Team names */}
+        <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "center", gap: 6, marginBottom: 16 }}>
+          {["Michael Seddoh", "Pranav Waghmare", "Qiaohui Gao", "Soumya Singh", "Vaishnavi Kulkarni"].map(n => (
+            <span key={n} style={{ background: "rgba(125,211,252,0.08)", color: "#bae6fd", borderRadius: 20, padding: "4px 11px", fontSize: 10.5, border: "1px solid rgba(125,211,252,0.2)", whiteSpace: "nowrap" }}>{n}</span>
+          ))}
         </div>
+        <p style={{ color: "#334155", fontSize: 11, letterSpacing: 1.2 }}>INFO 7385 · NORTHEASTERN UNIVERSITY · SPRING 2026</p>
       </div>
     )
   },
   {
     label: "Problem",
     content: () => (
-      <SlideShell badge="The Problem" title="AI Has Turned Misinformation Into a Weapon" subtitle="The threat is no longer human error — it's machine-generated, scalable, and virtually undetectable." accent={DANGER} bg="linear-gradient(160deg,#0a0f1e,#1a0a0a)">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
+      <div style={{ minHeight: 500, display: "flex", flexDirection: "column", padding: "30px 44px", background: "linear-gradient(160deg,#0f172a,#1a0808)" }}>
+        <span style={{ color: "#f87171", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 8 }}>The Problem</span>
+        <h2 style={{ color: "white", fontWeight: 900, fontSize: 30, lineHeight: 1.2, marginBottom: 4 }}>Misinformation hits everyone differently.</h2>
+        <p style={{ color: "#f87171", fontWeight: 700, fontSize: 18, marginBottom: 22 }}>Nobody is protecting any of them.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12, flex: 1, marginBottom: 16 }}>
           {[
-            { icon: "🤖", stat: "900%", label: "Growth in deepfake content", sub: "2019–2023 · Anyone can now create convincing fakes with zero technical skill", color: DANGER },
-            { icon: "⚡", stat: "6×", label: "Faster spread of AI fake news", sub: "AI-generated misinformation travels 6× faster than real news on social media", color: "#fb923c" },
-            { icon: "👴", stat: "$4.8B", label: "Lost by seniors to AI scams", sub: "Up 43% YoY · Deepfake voice calls impersonate family, doctors, executives", color: AMBER },
-            { icon: "🧬", stat: "#1", label: "Global risk — WEF 2024", sub: "Ranked above climate change & geopolitical conflict for the first time ever", color: PURPLE },
-          ].map(({ icon, stat, label, sub, color }) => (
-            <div key={stat} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${color}33`, borderRadius: 12, padding: "14px 16px" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                <span style={{ fontSize: 22 }}>{icon}</span>
-                <span style={{ color, fontWeight: 800, fontSize: 28, lineHeight: 1 }}>{stat}</span>
+            { Av: KidAvatar,    color: "#34d399", who: "Students",  age: "Ages 8–12",  damage: "Shared a deepfake.",     stat: "Thinks she got it right." },
+            { Av: TeenAvatar,   color: "#60a5fa", who: "Teenagers", age: "Ages 13–17", damage: "Scammed 4,000 people.",  stat: "With one tap. Didn't check." },
+            { Av: EmpAvatar,    color: "#f59e0b", who: "Employees", age: "Ages 18–64", damage: "$80K gone.",             stat: "One convincing email." },
+            { Av: SeniorAvatar, color: "#f87171", who: "Seniors",   age: "Ages 65+",   damage: "Savings gone. 10 mins.", stat: "AI cloned his grandson's voice." },
+          ].map(({ Av, color, who, age, damage, stat }) => (
+            <div key={who} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 14, padding: "16px 14px", border: `1px solid ${color}30`, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 10 }}>
+              <p style={{ color, fontWeight: 900, fontSize: 15, lineHeight: 1.2 }}>{damage}</p>
+              <div style={{ borderRadius: "50%", overflow: "hidden", border: `2.5px solid ${color}55`, boxShadow: `0 0 12px ${color}22` }}>
+                <Av size={60} color={color} />
               </div>
-              <p style={{ color: "#e2e8f0", fontWeight: 600, fontSize: 13, margin: "0 0 4px" }}>{label}</p>
-              <p style={{ color: "#475569", fontSize: 11, margin: 0, lineHeight: 1.5 }}>{sub}</p>
+              <div>
+                <p style={{ color: "#e2e8f0", fontWeight: 800, fontSize: 13 }}>{who}</p>
+                <p style={{ color: "#475569", fontSize: 10, marginBottom: 4 }}>{age}</p>
+                <p style={{ color: "#64748b", fontSize: 11, fontStyle: "italic" }}>{stat}</p>
+              </div>
             </div>
           ))}
         </div>
-        <div style={{ background: "rgba(248,113,113,0.08)", border: "1px solid rgba(248,113,113,0.25)", borderRadius: 10, padding: "12px 16px" }}>
-          <p style={{ color: "#fca5a5", fontSize: 13, margin: 0, fontWeight: 500 }}>⚠️ <strong>The gap:</strong> No single platform defends <em>all age groups</em> against AI-generated misinformation — kids, teens, adults, and seniors are all left to fend for themselves.</p>
+        <div style={{ background: "rgba(248,113,113,0.07)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: 10, padding: "12px 18px", textAlign: "center" }}>
+          <p style={{ color: "#fca5a5", fontSize: 14, fontWeight: 800, margin: 0 }}>Every generation is exposed. Every threat is different. <span style={{ color: "white" }}>No product today protects all of them.</span></p>
         </div>
-      </SlideShell>
+      </div>
     )
   },
   {
     label: "Solution",
     content: () => (
-      <SlideShell badge="The Solution" title="TruthLens" subtitle="One platform. Real-time AI detection. Age-adaptive literacy. Every generation protected." accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061e30)">
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
+      <div style={{ minHeight: 500, display: "flex", flexDirection: "column", padding: "30px 44px", background: "linear-gradient(160deg,#0f172a,#061520)" }}>
+        <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 8 }}>The Solution</span>
+        <h2 style={{ color: "white", fontWeight: 900, fontSize: 30, lineHeight: 1.2, marginBottom: 4 }}>One platform. Two ways it works.</h2>
+        <p style={{ color: "#38bdf8", fontWeight: 700, fontSize: 18, marginBottom: 16 }}>A completely different experience for every person.</p>
+        {/* Product strip */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 40px 1fr", gap: 0, marginBottom: 16, alignItems: "center" }}>
+          <div style={{ background: "rgba(248,113,113,0.07)", borderRadius: 12, padding: "12px 16px", border: "1px solid rgba(248,113,113,0.22)", textAlign: "center" }}>
+            <div style={{ fontSize: 26, marginBottom: 4 }}>🧩</div>
+            <p style={{ color: "white", fontWeight: 800, fontSize: 14, marginBottom: 3 }}>Browser Extension</p>
+            <p style={{ color: "#94a3b8", fontSize: 12 }}>Catches fake and AI-generated content in real time — for everyone, as they browse.</p>
+          </div>
+          <div style={{ textAlign: "center", color: "#334155", fontSize: 22, fontWeight: 900 }}>+</div>
+          <div style={{ background: "rgba(56,189,248,0.07)", borderRadius: 12, padding: "12px 16px", border: "1px solid rgba(56,189,248,0.22)", textAlign: "center" }}>
+            <div style={{ fontSize: 26, marginBottom: 4 }}>🎮</div>
+            <p style={{ color: "white", fontWeight: 800, fontSize: 14, marginBottom: 3 }}>Learning Experience</p>
+            <p style={{ color: "#94a3b8", fontSize: 12 }}>Tailored to each person's age — games for kids, drills for employees, simple guides for seniors.</p>
+          </div>
+        </div>
+        {/* Per-persona breakdown */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12, flex: 1 }}>
           {[
-            { icon: "🎓", title: "Age-Adaptive Modules", items: ["🧒 Games & quizzes for kids", "📱 Social challenges for teens", "💼 Phishing simulators for adults", "👴 Scam-recognition drills for seniors"], color: GREEN },
-            { icon: "🧩", title: "AI Browser Extension", items: ["Detects AI-generated text", "Flags deepfake images & video", "Plain-language confidence score", "Works across all major browsers"], color: ACCENT },
-            { icon: "👨‍👩‍👧", title: "Family Dashboard", items: ["1 subscription, 6 accounts", "Parents track kids' progress", "Families support seniors' safety", "Cross-generational, first of its kind"], color: PURPLE },
-          ].map(({ icon, title, items, color }) => (
-            <div key={title} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${color}33`, borderRadius: 12, padding: "14px 16px" }}>
-              <div style={{ fontSize: 26, marginBottom: 8 }}>{icon}</div>
-              <p style={{ color, fontWeight: 700, fontSize: 13, margin: "0 0 10px" }}>{title}</p>
-              {items.map(i => <p key={i} style={{ color: "#94a3b8", fontSize: 11, margin: "0 0 5px" }}>• {i}</p>)}
+            { Av: KidAvatar,    color: "#34d399", who: "Students",  ext: "Flags fakes in class chats.",          learn: "Games that feel like fun." },
+            { Av: TeenAvatar,   color: "#60a5fa", who: "Teenagers", ext: "Catches manipulated social posts.",    learn: "'Would you share this?' challenges." },
+            { Av: EmpAvatar,    color: "#f59e0b", who: "Employees", ext: "Detects phishing at work.",            learn: "Live drills. Battle-ready teams." },
+            { Av: SeniorAvatar, color: "#f87171", who: "Seniors",   ext: "One-tap scam alert. Family notified.", learn: "Jargon-free. Large text. Simple." },
+          ].map(({ Av, color, who, ext, learn }) => (
+            <div key={who} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 14, padding: "16px 12px", border: `1px solid ${color}30`, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 10 }}>
+              <div style={{ borderRadius: "50%", overflow: "hidden", border: `2.5px solid ${color}66`, boxShadow: `0 0 14px ${color}33` }}>
+                <Av size={58} color={color} />
+              </div>
+              <p style={{ color, fontWeight: 900, fontSize: 13 }}>{who}</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
+                <div style={{ background: "rgba(248,113,113,0.08)", borderRadius: 8, padding: "7px 10px", border: "1px solid rgba(248,113,113,0.18)" }}>
+                  <p style={{ color: "#fca5a5", fontSize: 9, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>🧩 EXTENSION</p>
+                  <p style={{ color: "#cbd5e1", fontSize: 11, lineHeight: 1.4 }}>{ext}</p>
+                </div>
+                <div style={{ background: "rgba(56,189,248,0.08)", borderRadius: 8, padding: "7px 10px", border: `1px solid ${color}25` }}>
+                  <p style={{ color, fontSize: 9, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>🎮 LEARNING</p>
+                  <p style={{ color: "#cbd5e1", fontSize: 11, lineHeight: 1.4 }}>{learn}</p>
+                </div>
+              </div>
             </div>
           ))}
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          {[
-            { label: "Free Tier", desc: "Core access, no credit card", color: "#475569" },
-            { label: "$7.99 / mo", desc: "Individual Plan", color: ACCENT },
-            { label: "$14.99 / mo", desc: "Family Plan · 6 accounts", color: GREEN },
-          ].map(({ label, desc, color }) => (
-            <div key={label} style={{ flex: 1, background: `${color}11`, border: `1px solid ${color}33`, borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
-              <p style={{ color, fontWeight: 800, fontSize: 15, margin: "0 0 2px" }}>{label}</p>
-              <p style={{ color: "#475569", fontSize: 11, margin: 0 }}>{desc}</p>
-            </div>
-          ))}
-        </div>
-      </SlideShell>
+      </div>
     )
   },
   {
