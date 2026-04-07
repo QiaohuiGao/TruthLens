@@ -1,73 +1,51 @@
-# React + TypeScript + Vite
+# TruthLens — Pitch Deck
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> "One Platform. Every Age. Smarter Media for Everyone."
 
-Currently, two official plugins are available:
+An interactive investor pitch deck for **TruthLens**, a digital literacy and misinformation detection platform built for all age groups. Created for INFO 7385: Managerial Communication for Engineers at Northeastern University, Spring 2026.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Slides
 
-## React Compiler
+| # | Slide | Content |
+|---|-------|---------|
+| 1 | Cover | Team intro & tagline |
+| 2 | Problem | Deepfakes, misinformation stats, market gap |
+| 3 | Solution | Age-adaptive modules, browser extension, family dashboard |
+| 4 | Market | Four target segments (kids, teens, adults, seniors) |
+| 5 | Competition | Competitive landscape analysis |
+| 6 | Business Model | Freemium + B2B2C, 5 revenue streams |
+| 7 | Financials | 3-year projections, break-even Year 2 |
+| 8 | Investment | $2M seed ask, use of funds, 32× ROI potential |
+| 9 | Team | CEO, CTO, CPO, CMO, CFO |
+| 10 | Conclusion | Call to action for investors, schools & enterprises |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React 18 + TypeScript
+- Vite 5
+- Pure inline CSS (zero external UI dependencies)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+Output goes to `dist/` — ready to deploy to Vercel, Netlify, or any static host.
+
+## Team
+
+Michael Seddoh · Pranav Avinash Waghmare · Qiaohui Gao · Soumya Singh · Vaishnavi Anand Kulkarni
+
+---
+
+INFO 7385 · Northeastern University · Spring 2026
