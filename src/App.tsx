@@ -95,7 +95,7 @@ const slides = [
   {
     label: "Cover",
     content: () => (
-      <div style={{ height: SLIDE_H, overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "40px 52px", background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#0e7490 100%)", position: "relative", overflow: "hidden" }}>
+      <div style={{ height: SLIDE_H, overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "40px 52px", background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#0e7490 100%)", position: "relative" }}>
         {/* Concentric rings */}
         {[500, 330, 180].map(s => (
           <div key={s} style={{ position: "absolute", width: s, height: s, borderRadius: "50%", border: `1px solid rgba(125,211,252,${s === 500 ? "0.06" : s === 330 ? "0.09" : "0.14"})`, top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
