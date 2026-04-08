@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SLIDE_H = 500; // fixed height for every slide
+const SLIDE_H = 560; // fixed height for every slide
 
 const ACCENT = "#38bdf8";
 const DANGER = "#f87171";
