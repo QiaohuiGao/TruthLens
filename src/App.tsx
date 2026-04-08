@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-// Per-slide heights — slides 1-3 are content-dense; 4-10 are data slides
-const SLIDE_HEIGHTS = [610, 600, 620, 500, 480, 510, 500, 490, 490, 510];
 
 const ACCENT = "#38bdf8";
 const DANGER = "#f87171";
@@ -81,11 +79,11 @@ const Tag = ({ label, color }) => (
   <span style={{ background: `${color}22`, color, border: `1px solid ${color}44`, borderRadius: 20, padding: "2px 10px", fontSize: 10, fontWeight: 700, letterSpacing: 0.5 }}>{label}</span>
 );
 
-const SlideShell = ({ children, bg = "linear-gradient(160deg,#0a0f1e,#0f1e38)", accent = ACCENT, badge, title, subtitle, h = 490 }) => (
-  <div style={{ height: h, display: "flex", flexDirection: "column", background: bg, padding: "20px 32px 16px", overflow: "hidden" }}>
-    {badge && <span style={{ color: accent, fontWeight: 700, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", marginBottom: 4 }}>{badge}</span>}
-    {title && <h2 style={{ color: "white", fontWeight: 800, fontSize: 26, margin: "0 0 3px", lineHeight: 1.2 }}>{title}</h2>}
-    {subtitle && <p style={{ color: "#64748b", fontSize: 12, margin: "0 0 12px" }}>{subtitle}</p>}
+const SlideShell = ({ children, bg = "linear-gradient(160deg,#0a0f1e,#0f1e38)", accent = ACCENT, badge, title, subtitle }) => (
+  <div style={{ display: "flex", flexDirection: "column", background: bg, padding: "24px 36px 28px" }}>
+    {badge && <span style={{ color: accent, fontWeight: 700, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>{badge}</span>}
+    {title && <h2 style={{ color: "white", fontWeight: 800, fontSize: 28, margin: "0 0 4px", lineHeight: 1.2 }}>{title}</h2>}
+    {subtitle && <p style={{ color: "#64748b", fontSize: 13, margin: "0 0 16px" }}>{subtitle}</p>}
     {children}
   </div>
 );
@@ -96,7 +94,7 @@ const slides = [
   {
     label: "Cover",
     content: () => (
-      <div style={{ height: 610, overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "32px 52px", background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#0e7490 100%)", position: "relative" }}>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", padding: "44px 52px 40px", background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#0e7490 100%)", position: "relative" }}>
         {/* Concentric rings */}
         {[500, 330, 180].map(s => (
           <div key={s} style={{ position: "absolute", width: s, height: s, borderRadius: "50%", border: `1px solid rgba(125,211,252,${s === 500 ? "0.06" : s === 330 ? "0.09" : "0.14"})`, top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
@@ -139,7 +137,7 @@ const slides = [
   {
     label: "Problem",
     content: () => (
-      <div style={{ height: 600, overflow: "hidden", display: "flex", flexDirection: "column", padding: "22px 40px 18px", background: "linear-gradient(160deg,#0f172a,#1a0808)" }}>
+      <div style={{ display: "flex", flexDirection: "column", padding: "28px 44px 32px", background: "linear-gradient(160deg,#0f172a,#1a0808)" }}>
         <span style={{ color: "#f87171", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 6 }}>The Problem</span>
         <h2 style={{ color: "white", fontWeight: 900, fontSize: 28, lineHeight: 1.2, margin: "0 0 2px" }}>Misinformation hits everyone differently.</h2>
         <p style={{ color: "#f87171", fontWeight: 700, fontSize: 16, margin: "0 0 14px" }}>Nobody is protecting any of them.</p>
@@ -172,7 +170,7 @@ const slides = [
   {
     label: "Solution",
     content: () => (
-      <div style={{ height: 620, overflow: "hidden", display: "flex", flexDirection: "column", padding: "22px 40px 16px", background: "linear-gradient(160deg,#0f172a,#061520)" }}>
+      <div style={{ display: "flex", flexDirection: "column", padding: "28px 44px 32px", background: "linear-gradient(160deg,#0f172a,#061520)" }}>
         <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 5 }}>The Solution</span>
         <h2 style={{ color: "white", fontWeight: 900, fontSize: 27, lineHeight: 1.2, margin: "0 0 2px" }}>One platform. Two ways it works.</h2>
         <p style={{ color: "#38bdf8", fontWeight: 700, fontSize: 15, margin: "0 0 12px" }}>A completely different experience for every person.</p>
@@ -336,7 +334,7 @@ const slides = [
         { age: "Ages 65+", label: "High-Stakes, Underserved", pain: "$4.8B lost to fraud annually", solution: "Large-text interface · Family monitoring", color: DANGER },
       ];
       return (
-        <SlideShell badge="Target Market" title="Four Segments. One Platform." subtitle="~130M U.S. households · $95.7B digital education market by 2030 (CAGR 24.2%)" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#130a1e)" h={500}>
+        <SlideShell badge="Target Market" title="Four Segments. One Platform." subtitle="~130M U.S. households · $95.7B digital education market by 2030 (CAGR 24.2%)" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#130a1e)">
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
             {segments.map((s, i) => (
               <div key={s.label} style={{ background: "rgba(255,255,255,0.04)", borderRadius: 12, overflow: "hidden", border: `1px solid ${s.color}44`, display: "flex", flexDirection: "column" }}>
@@ -376,7 +374,7 @@ const slides = [
         { name: "🔍 TruthLens",         aud: "All Ages (8–65+)", edu: true,  detect: true,  fam: true,  ages: true,  hl: true  },
       ];
       return (
-        <SlideShell badge="Competitive Landscape" title="No One Does What We Do" subtitle="Every competitor solves a fragment. TruthLens solves the whole." accent={AMBER} bg="linear-gradient(160deg,#0a0f1e,#1a1200)" h={480}>
+        <SlideShell badge="Competitive Landscape" title="No One Does What We Do" subtitle="Every competitor solves a fragment. TruthLens solves the whole." accent={AMBER} bg="linear-gradient(160deg,#0a0f1e,#1a1200)">
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
               <tr style={{ borderBottom: "1px solid #334155" }}>
@@ -410,7 +408,7 @@ const slides = [
   {
     label: "Business Model",
     content: () => (
-      <SlideShell badge="Business Model" title="Freemium + B2B2C Hybrid" subtitle="Free tier drives adoption · Five revenue streams diversify from day one" accent={GREEN} bg="linear-gradient(160deg,#0a0f1e,#071a0f)" h={510}>
+      <SlideShell badge="Business Model" title="Freemium + B2B2C Hybrid" subtitle="Free tier drives adoption · Five revenue streams diversify from day one" accent={GREEN} bg="linear-gradient(160deg,#0a0f1e,#071a0f)">
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
           {[
             { n: "🆓", title: "Free Tier", detail: "$0 · 1 age group module + browser extension limited to 10 scans/day · Conversion funnel into paid plans", tag: "Always On", color: "#94a3b8" },
@@ -441,7 +439,7 @@ const slides = [
   {
     label: "Financials",
     content: () => (
-      <SlideShell badge="Financial Projections" title="Path to $13.1M Revenue by Year 3" subtitle="Conservative bottom-up model · Break-even reached in Year 2" accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061830)" h={500}>
+      <SlideShell badge="Financial Projections" title="Path to $13.1M Revenue by Year 3" subtitle="Conservative bottom-up model · Break-even reached in Year 2" accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061830)">
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
           {[
             { year: "Year 1", rev: "$600K", subs: "5,000 subscribers", profit: "($1.2M) net loss", color: DANGER, tag: "Seed Stage" },
@@ -489,7 +487,7 @@ const slides = [
   {
     label: "Investment",
     content: () => (
-      <SlideShell badge="Investment Ask" title="Raising $2M Seed Round" subtitle="18 months of runway · Cash-flow positive by Month 18 without a Series A" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#12071e)" h={490}>
+      <SlideShell badge="Investment Ask" title="Raising $2M Seed Round" subtitle="18 months of runway · Cash-flow positive by Month 18 without a Series A" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#12071e)">
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
           {[
             { icon: "⚙️", use: "Product Development", amount: "$900K", pct: "45%", desc: "AI detection engine, mobile app, browser extension", color: ACCENT },
@@ -522,7 +520,7 @@ const slides = [
   {
     label: "Team",
     content: () => (
-      <SlideShell badge="The Team" title="Built to Execute" subtitle="Five founders. Five domains. One mission." accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061830)" h={490}>
+      <SlideShell badge="The Team" title="Built to Execute" subtitle="Five founders. Five domains. One mission." accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061830)">
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
           {[
             { role: "CEO", domain: "Strategy & Vision", desc: "Leads business strategy, investor relations & partnerships", color: ACCENT, icon: "🧭" },
@@ -552,7 +550,7 @@ const slides = [
   {
     label: "Conclusion",
     content: () => (
-      <div style={{ height: 510, background: "linear-gradient(135deg,#020817 0%,#0c1a35 50%,#0e3554 100%)", display: "flex", flexDirection: "column", padding: "20px 32px 16px", position: "relative", overflow: "hidden" }}>
+      <div style={{ background: "linear-gradient(135deg,#020817 0%,#0c1a35 50%,#0e3554 100%)", display: "flex", flexDirection: "column", padding: "28px 36px 32px", position: "relative" }}>
         <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle,rgba(56,189,248,0.06),transparent 70%)", bottom: -80, right: -80, pointerEvents: "none" }} />
         <span style={{ color: ACCENT, fontWeight: 700, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", marginBottom: 4 }}>Conclusion & Call to Action</span>
         <h2 style={{ color: "white", fontWeight: 800, fontSize: 24, margin: "0 0 12px", lineHeight: 1.3 }}>Everyone Deserves to Know What's Real.</h2>
@@ -623,7 +621,7 @@ export default function PitchDeck() {
       </div>
 
       {/* Slide */}
-      <div style={{ width: "100%", maxWidth: 840, borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", height: SLIDE_HEIGHTS[cur], border: "1px solid rgba(255,255,255,0.07)" }}>
+      <div style={{ width: "100%", maxWidth: 840, borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", border: "1px solid rgba(255,255,255,0.07)" }}>
         <Slide />
       </div>
 
