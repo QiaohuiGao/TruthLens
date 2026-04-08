@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const SLIDE_H = 500; // fixed height for every slide
+
 const ACCENT = "#38bdf8";
 const DANGER = "#f87171";
 const GREEN = "#4ade80";
@@ -79,7 +81,7 @@ const Tag = ({ label, color }) => (
 );
 
 const SlideShell = ({ children, bg = "linear-gradient(160deg,#0a0f1e,#0f1e38)", accent = ACCENT, badge, title, subtitle }) => (
-  <div style={{ height: "100%", display: "flex", flexDirection: "column", background: bg, padding: "28px 36px 24px" }}>
+  <div style={{ height: SLIDE_H, display: "flex", flexDirection: "column", background: bg, padding: "28px 36px 24px", overflow: "hidden" }}>
     {badge && <span style={{ color: accent, fontWeight: 700, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>{badge}</span>}
     {title && <h2 style={{ color: "white", fontWeight: 800, fontSize: 28, margin: "0 0 4px", lineHeight: 1.2 }}>{title}</h2>}
     {subtitle && <p style={{ color: "#64748b", fontSize: 13, margin: "0 0 18px" }}>{subtitle}</p>}
@@ -93,7 +95,7 @@ const slides = [
   {
     label: "Cover",
     content: () => (
-      <div style={{ minHeight: 500, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "40px 52px", background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#0e7490 100%)", position: "relative", overflow: "hidden" }}>
+      <div style={{ height: SLIDE_H, overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "40px 52px", background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#0e7490 100%)", position: "relative", overflow: "hidden" }}>
         {/* Concentric rings */}
         {[500, 330, 180].map(s => (
           <div key={s} style={{ position: "absolute", width: s, height: s, borderRadius: "50%", border: `1px solid rgba(125,211,252,${s === 500 ? "0.06" : s === 330 ? "0.09" : "0.14"})`, top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
@@ -136,7 +138,7 @@ const slides = [
   {
     label: "Problem",
     content: () => (
-      <div style={{ minHeight: 500, display: "flex", flexDirection: "column", padding: "30px 44px", background: "linear-gradient(160deg,#0f172a,#1a0808)" }}>
+      <div style={{ height: SLIDE_H, overflow: "hidden", display: "flex", flexDirection: "column", padding: "30px 44px", background: "linear-gradient(160deg,#0f172a,#1a0808)" }}>
         <span style={{ color: "#f87171", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 8 }}>The Problem</span>
         <h2 style={{ color: "white", fontWeight: 900, fontSize: 30, lineHeight: 1.2, marginBottom: 4 }}>Misinformation hits everyone differently.</h2>
         <p style={{ color: "#f87171", fontWeight: 700, fontSize: 18, marginBottom: 22 }}>Nobody is protecting any of them.</p>
@@ -169,7 +171,7 @@ const slides = [
   {
     label: "Solution",
     content: () => (
-      <div style={{ minHeight: 500, display: "flex", flexDirection: "column", padding: "30px 44px", background: "linear-gradient(160deg,#0f172a,#061520)" }}>
+      <div style={{ height: SLIDE_H, overflow: "hidden", display: "flex", flexDirection: "column", padding: "30px 44px", background: "linear-gradient(160deg,#0f172a,#061520)" }}>
         <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 8 }}>The Solution</span>
         <h2 style={{ color: "white", fontWeight: 900, fontSize: 30, lineHeight: 1.2, marginBottom: 4 }}>One platform. Two ways it works.</h2>
         <p style={{ color: "#38bdf8", fontWeight: 700, fontSize: 18, marginBottom: 16 }}>A completely different experience for every person.</p>
@@ -549,7 +551,7 @@ const slides = [
   {
     label: "Conclusion",
     content: () => (
-      <div style={{ height: "100%", background: "linear-gradient(135deg,#020817 0%,#0c1a35 50%,#0e3554 100%)", display: "flex", flexDirection: "column", padding: "28px 36px 24px", position: "relative", overflow: "hidden" }}>
+      <div style={{ height: SLIDE_H, background: "linear-gradient(135deg,#020817 0%,#0c1a35 50%,#0e3554 100%)", display: "flex", flexDirection: "column", padding: "28px 36px 24px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle,rgba(56,189,248,0.06),transparent 70%)", bottom: -80, right: -80, pointerEvents: "none" }} />
         <span style={{ color: ACCENT, fontWeight: 700, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>Conclusion & Call to Action</span>
         <h2 style={{ color: "white", fontWeight: 800, fontSize: 26, margin: "0 0 16px", lineHeight: 1.3 }}>Everyone Deserves to Know What's Real.</h2>
@@ -620,7 +622,7 @@ export default function PitchDeck() {
       </div>
 
       {/* Slide */}
-      <div style={{ width: "100%", maxWidth: 840, borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", minHeight: 470, border: "1px solid rgba(255,255,255,0.07)" }}>
+      <div style={{ width: "100%", maxWidth: 840, borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", height: SLIDE_H, border: "1px solid rgba(255,255,255,0.07)" }}>
         <Slide />
       </div>
 
