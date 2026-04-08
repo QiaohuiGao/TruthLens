@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 
 const ACCENT = "#38bdf8";
@@ -496,9 +496,24 @@ export default function PitchDeck() {
   const [cur, setCur] = useState(0);
   const [navStyle, setNavStyle] = useState(0); // 0=Classic  1=Pill  2=Minimal
   const [printing, setPrinting] = useState(false);
+  const [zoom, setZoom] = useState(1);
+  const pageRef = useRef<HTMLDivElement>(null);
 
   const prev = () => setCur(c => Math.max(0, c - 1));
   const next = () => setCur(c => Math.min(slides.length - 1, c + 1));
+
+  // Responsive zoom: scale the 840px layout to fit any screen width
+  useEffect(() => {
+    const update = () => {
+      const page = pageRef.current;
+      if (!page) return;
+      const availW = page.offsetWidth - 32; // subtract 16px padding each side
+      setZoom(Math.min(1, availW / 840));
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
 
   // PDF export: render all slides, then trigger browser print dialog
   useEffect(() => {
@@ -627,67 +642,69 @@ export default function PitchDeck() {
 
   // ── Normal interactive view ────────────────────────────────────────────────
   return (
-    <div style={{ fontFamily: "'Inter',system-ui,sans-serif", background: "#020617", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 16px" }}>
+    // pageRef measures available width for zoom calculation
+    <div ref={pageRef} style={{ fontFamily: "'Inter',system-ui,sans-serif", background: "#020617", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 16px" }}>
 
-      {/* Top bar */}
-      <div style={{ width: "100%", maxWidth: 840, marginBottom: 12 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ background: "linear-gradient(135deg,#0ea5e9,#6366f1)", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🔍</div>
-            <span style={{ color: "white", fontWeight: 800, fontSize: 15, letterSpacing: -0.5 }}>TruthLens</span>
-            <span style={{ color: "#1e293b", fontSize: 14 }}>|</span>
-            <span style={{ color: "#334155", fontSize: 12 }}>Investor Pitch Deck · Spring 2026</span>
+      {/* Everything inside is 840px wide, scaled uniformly by zoom */}
+      <div style={{ width: 840, zoom } as React.CSSProperties}>
+
+        {/* Top bar */}
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <div style={{ background: "linear-gradient(135deg,#0ea5e9,#6366f1)", borderRadius: 8, width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🔍</div>
+              <span style={{ color: "white", fontWeight: 800, fontSize: 15, letterSpacing: -0.5 }}>TruthLens</span>
+              <span style={{ color: "#1e293b", fontSize: 14 }}>|</span>
+              <span style={{ color: "#334155", fontSize: 12 }}>Investor Pitch Deck · Spring 2026</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <Tag label="CONFIDENTIAL" color={DANGER} />
+              <span style={{ color: "#334155", fontSize: 12 }}>{cur + 1} / {slides.length}</span>
+            </div>
           </div>
+          {/* Tab nav */}
+          <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+            {slides.map((s, i) => (
+              <button key={i} onClick={() => setCur(i)}
+                style={{ background: i === cur ? "linear-gradient(135deg,#0ea5e9,#6366f1)" : "rgba(255,255,255,0.04)", color: i === cur ? "white" : "#475569", border: "1px solid " + (i === cur ? "transparent" : "rgba(255,255,255,0.06)"), borderRadius: 6, padding: "4px 12px", fontSize: 11, cursor: "pointer", fontWeight: i === cur ? 700 : 400, transition: "all 0.2s" }}>
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Slide */}
+        <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", border: "1px solid rgba(255,255,255,0.07)" }}>
+          <Slide />
+        </div>
+
+        {/* Prev / Next nav — current style */}
+        {navDefs[navStyle].render()}
+
+        {/* Controls row: nav style switcher + PDF export */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Tag label="CONFIDENTIAL" color={DANGER} />
-            <span style={{ color: "#334155", fontSize: 12 }}>{cur + 1} / {slides.length}</span>
+            <span style={{ color: "#334155", fontSize: 11, marginRight: 2 }}>Nav:</span>
+            {navDefs.map(n => (
+              <button key={n.id} onClick={() => setNavStyle(n.id)}
+                style={{ background: navStyle === n.id ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.03)", color: navStyle === n.id ? ACCENT : "#475569", border: `1px solid ${navStyle === n.id ? "rgba(56,189,248,0.35)" : "rgba(255,255,255,0.06)"}`, borderRadius: 6, padding: "4px 12px", fontSize: 11, cursor: "pointer", fontWeight: navStyle === n.id ? 700 : 400, transition: "all 0.15s" }}>
+                {n.label}
+              </button>
+            ))}
           </div>
-        </div>
-        {/* Tab nav */}
-        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-          {slides.map((s, i) => (
-            <button key={i} onClick={() => setCur(i)}
-              style={{ background: i === cur ? "linear-gradient(135deg,#0ea5e9,#6366f1)" : "rgba(255,255,255,0.04)", color: i === cur ? "white" : "#475569", border: "1px solid " + (i === cur ? "transparent" : "rgba(255,255,255,0.06)"), borderRadius: 6, padding: "4px 12px", fontSize: 11, cursor: "pointer", fontWeight: i === cur ? 700 : 400, transition: "all 0.2s" }}>
-              {s.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Slide */}
-      <div style={{ width: "100%", maxWidth: 840, borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", border: "1px solid rgba(255,255,255,0.07)" }}>
-        <Slide />
-      </div>
-
-      {/* Prev / Next nav — current style */}
-      {navDefs[navStyle].render()}
-
-      {/* ── Controls row: nav style switcher + PDF export ─────────────────── */}
-      <div style={{ width: "100%", maxWidth: 840, display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14 }}>
-
-        {/* Style switcher */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ color: "#334155", fontSize: 11, marginRight: 2 }}>Nav:</span>
-          {navDefs.map(n => (
-            <button key={n.id} onClick={() => setNavStyle(n.id)}
-              style={{ background: navStyle === n.id ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.03)", color: navStyle === n.id ? ACCENT : "#475569", border: `1px solid ${navStyle === n.id ? "rgba(56,189,248,0.35)" : "rgba(255,255,255,0.06)"}`, borderRadius: 6, padding: "4px 12px", fontSize: 11, cursor: "pointer", fontWeight: navStyle === n.id ? 700 : 400, transition: "all 0.15s" }}>
-              {n.label}
-            </button>
-          ))}
+          <button onClick={() => setPrinting(true)}
+            style={{ background: "linear-gradient(135deg,#0ea5e9,#6366f1)", color: "white", border: "none", borderRadius: 8, padding: "7px 18px", fontSize: 12, cursor: "pointer", fontWeight: 700, display: "flex", alignItems: "center", gap: 6, boxShadow: "0 4px 16px rgba(14,165,233,0.3)" }}>
+            📄 Export PDF
+          </button>
         </div>
 
-        {/* PDF export */}
-        <button onClick={() => setPrinting(true)}
-          style={{ background: "linear-gradient(135deg,#0ea5e9,#6366f1)", color: "white", border: "none", borderRadius: 8, padding: "7px 18px", fontSize: 12, cursor: "pointer", fontWeight: 700, display: "flex", alignItems: "center", gap: 6, boxShadow: "0 4px 16px rgba(14,165,233,0.3)" }}>
-          📄 Export PDF
-        </button>
-      </div>
+        {/* Footer */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "8px 4px", borderTop: "1px solid #0f172a" }}>
+          <span style={{ color: "#1e293b", fontSize: 11 }}>© 2026 TruthLens Inc. All rights reserved.</span>
+          <span style={{ color: "#1e293b", fontSize: 11 }}>Confidential & Proprietary · Not for Distribution</span>
+          <span style={{ color: "#1e293b", fontSize: 11 }}>hello@truthlens.io</span>
+        </div>
 
-      {/* Footer */}
-      <div style={{ width: "100%", maxWidth: 840, display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "8px 4px", borderTop: "1px solid #0f172a" }}>
-        <span style={{ color: "#1e293b", fontSize: 11 }}>© 2026 TruthLens Inc. All rights reserved.</span>
-        <span style={{ color: "#1e293b", fontSize: 11 }}>Confidential & Proprietary · Not for Distribution</span>
-        <span style={{ color: "#1e293b", fontSize: 11 }}>hello@truthlens.io</span>
       </div>
     </div>
   );
