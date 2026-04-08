@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-const SLIDE_H = 560; // fixed height for every slide
+// Per-slide heights — slides 1-3 are content-dense; 4-10 are data slides
+const SLIDE_HEIGHTS = [610, 600, 620, 500, 480, 510, 500, 490, 490, 510];
 
 const ACCENT = "#38bdf8";
 const DANGER = "#f87171";
@@ -80,11 +81,11 @@ const Tag = ({ label, color }) => (
   <span style={{ background: `${color}22`, color, border: `1px solid ${color}44`, borderRadius: 20, padding: "2px 10px", fontSize: 10, fontWeight: 700, letterSpacing: 0.5 }}>{label}</span>
 );
 
-const SlideShell = ({ children, bg = "linear-gradient(160deg,#0a0f1e,#0f1e38)", accent = ACCENT, badge, title, subtitle }) => (
-  <div style={{ height: SLIDE_H, display: "flex", flexDirection: "column", background: bg, padding: "28px 36px 24px", overflow: "hidden" }}>
-    {badge && <span style={{ color: accent, fontWeight: 700, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>{badge}</span>}
-    {title && <h2 style={{ color: "white", fontWeight: 800, fontSize: 28, margin: "0 0 4px", lineHeight: 1.2 }}>{title}</h2>}
-    {subtitle && <p style={{ color: "#64748b", fontSize: 13, margin: "0 0 18px" }}>{subtitle}</p>}
+const SlideShell = ({ children, bg = "linear-gradient(160deg,#0a0f1e,#0f1e38)", accent = ACCENT, badge, title, subtitle, h = 490 }) => (
+  <div style={{ height: h, display: "flex", flexDirection: "column", background: bg, padding: "20px 32px 16px", overflow: "hidden" }}>
+    {badge && <span style={{ color: accent, fontWeight: 700, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", marginBottom: 4 }}>{badge}</span>}
+    {title && <h2 style={{ color: "white", fontWeight: 800, fontSize: 26, margin: "0 0 3px", lineHeight: 1.2 }}>{title}</h2>}
+    {subtitle && <p style={{ color: "#64748b", fontSize: 12, margin: "0 0 12px" }}>{subtitle}</p>}
     {children}
   </div>
 );
@@ -95,7 +96,7 @@ const slides = [
   {
     label: "Cover",
     content: () => (
-      <div style={{ height: SLIDE_H, overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "40px 52px", background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#0e7490 100%)", position: "relative" }}>
+      <div style={{ height: 610, overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "32px 52px", background: "linear-gradient(135deg,#0f172a 0%,#1e3a5f 55%,#0e7490 100%)", position: "relative" }}>
         {/* Concentric rings */}
         {[500, 330, 180].map(s => (
           <div key={s} style={{ position: "absolute", width: s, height: s, borderRadius: "50%", border: `1px solid rgba(125,211,252,${s === 500 ? "0.06" : s === 330 ? "0.09" : "0.14"})`, top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
@@ -113,20 +114,20 @@ const slides = [
         <h1 style={{ color: "white", fontWeight: 900, fontSize: 52, letterSpacing: -2, lineHeight: 1, marginBottom: 10 }}>TruthLens</h1>
         <p style={{ color: "#7dd3fc", fontSize: 16, fontWeight: 600, marginBottom: 24 }}>One platform. Built differently for every person who uses it.</p>
         {/* Four persona avatars */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 20, marginBottom: 10 }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 8 }}>
           {PERSONAS.map(({ Av, color, who, age }) => (
             <div key={who} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
               <div style={{ borderRadius: "50%", overflow: "hidden", border: `2.5px solid ${color}66`, boxShadow: `0 0 14px ${color}33` }}>
                 <Av size={60} color={color} />
               </div>
-              <p style={{ color, fontSize: 12, fontWeight: 800 }}>{who}</p>
-              <p style={{ color: "#94a3b8", fontSize: 10 }}>{age}</p>
+              <p style={{ color, fontSize: 12, fontWeight: 800, margin: 0 }}>{who}</p>
+              <p style={{ color: "#94a3b8", fontSize: 10, margin: 0 }}>{age}</p>
             </div>
           ))}
         </div>
-        <div style={{ width: "60%", height: 1, background: "linear-gradient(90deg,transparent,rgba(56,189,248,0.3),transparent)", marginBottom: 20 }} />
+        <div style={{ width: "60%", height: 1, background: "linear-gradient(90deg,transparent,rgba(56,189,248,0.3),transparent)", marginBottom: 12 }} />
         {/* Team names */}
-        <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "center", gap: 6, marginBottom: 16 }}>
+        <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "center", gap: 6, marginBottom: 10 }}>
           {["Michael Seddoh", "Pranav Waghmare", "Qiaohui Gao", "Soumya Singh", "Vaishnavi Kulkarni"].map(n => (
             <span key={n} style={{ background: "rgba(125,211,252,0.12)", color: "#e2e8f0", borderRadius: 20, padding: "4px 11px", fontSize: 10.5, border: "1px solid rgba(125,211,252,0.35)", whiteSpace: "nowrap" }}>{n}</span>
           ))}
@@ -138,26 +139,26 @@ const slides = [
   {
     label: "Problem",
     content: () => (
-      <div style={{ height: SLIDE_H, overflow: "hidden", display: "flex", flexDirection: "column", padding: "30px 44px", background: "linear-gradient(160deg,#0f172a,#1a0808)" }}>
-        <span style={{ color: "#f87171", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 8 }}>The Problem</span>
-        <h2 style={{ color: "white", fontWeight: 900, fontSize: 30, lineHeight: 1.2, marginBottom: 4 }}>Misinformation hits everyone differently.</h2>
-        <p style={{ color: "#f87171", fontWeight: 700, fontSize: 18, marginBottom: 22 }}>Nobody is protecting any of them.</p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12, flex: 1, marginBottom: 16 }}>
+      <div style={{ height: 600, overflow: "hidden", display: "flex", flexDirection: "column", padding: "22px 40px 18px", background: "linear-gradient(160deg,#0f172a,#1a0808)" }}>
+        <span style={{ color: "#f87171", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 6 }}>The Problem</span>
+        <h2 style={{ color: "white", fontWeight: 900, fontSize: 28, lineHeight: 1.2, margin: "0 0 2px" }}>Misinformation hits everyone differently.</h2>
+        <p style={{ color: "#f87171", fontWeight: 700, fontSize: 16, margin: "0 0 14px" }}>Nobody is protecting any of them.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10, flex: 1, marginBottom: 12 }}>
           {[
             { Av: KidAvatar,    color: "#34d399", who: "Students",  age: "Ages 8–12",  damage: "Shared a deepfake.",     stat: "Thinks she got it right." },
             { Av: TeenAvatar,   color: "#60a5fa", who: "Teenagers", age: "Ages 13–17", damage: "Scammed 4,000 people.",  stat: "With one tap. Didn't check." },
             { Av: EmpAvatar,    color: "#f59e0b", who: "Employees", age: "Ages 18–64", damage: "$80K gone.",             stat: "One convincing email." },
             { Av: SeniorAvatar, color: "#f87171", who: "Seniors",   age: "Ages 65+",   damage: "Savings gone. 10 mins.", stat: "AI cloned his grandson's voice." },
           ].map(({ Av, color, who, age, damage, stat }) => (
-            <div key={who} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 14, padding: "16px 14px", border: `1px solid ${color}30`, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 10 }}>
-              <p style={{ color, fontWeight: 900, fontSize: 15, lineHeight: 1.2 }}>{damage}</p>
+            <div key={who} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 14, padding: "12px 10px", border: `1px solid ${color}30`, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 7 }}>
+              <p style={{ color, fontWeight: 900, fontSize: 14, lineHeight: 1.2, margin: 0 }}>{damage}</p>
               <div style={{ borderRadius: "50%", overflow: "hidden", border: `2.5px solid ${color}55`, boxShadow: `0 0 12px ${color}22` }}>
-                <Av size={60} color={color} />
+                <Av size={54} color={color} />
               </div>
               <div>
-                <p style={{ color: "#e2e8f0", fontWeight: 800, fontSize: 13 }}>{who}</p>
-                <p style={{ color: "#475569", fontSize: 10, marginBottom: 4 }}>{age}</p>
-                <p style={{ color: "#64748b", fontSize: 11, fontStyle: "italic" }}>{stat}</p>
+                <p style={{ color: "#e2e8f0", fontWeight: 800, fontSize: 12, margin: "0 0 2px" }}>{who}</p>
+                <p style={{ color: "#475569", fontSize: 10, margin: "0 0 3px" }}>{age}</p>
+                <p style={{ color: "#64748b", fontSize: 10, fontStyle: "italic", margin: 0 }}>{stat}</p>
               </div>
             </div>
           ))}
@@ -171,45 +172,45 @@ const slides = [
   {
     label: "Solution",
     content: () => (
-      <div style={{ height: SLIDE_H, overflow: "hidden", display: "flex", flexDirection: "column", padding: "30px 44px", background: "linear-gradient(160deg,#0f172a,#061520)" }}>
-        <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 8 }}>The Solution</span>
-        <h2 style={{ color: "white", fontWeight: 900, fontSize: 30, lineHeight: 1.2, marginBottom: 4 }}>One platform. Two ways it works.</h2>
-        <p style={{ color: "#38bdf8", fontWeight: 700, fontSize: 18, marginBottom: 16 }}>A completely different experience for every person.</p>
+      <div style={{ height: 620, overflow: "hidden", display: "flex", flexDirection: "column", padding: "22px 40px 16px", background: "linear-gradient(160deg,#0f172a,#061520)" }}>
+        <span style={{ color: "#38bdf8", fontWeight: 700, fontSize: 11, letterSpacing: 2.5, textTransform: "uppercase", marginBottom: 5 }}>The Solution</span>
+        <h2 style={{ color: "white", fontWeight: 900, fontSize: 27, lineHeight: 1.2, margin: "0 0 2px" }}>One platform. Two ways it works.</h2>
+        <p style={{ color: "#38bdf8", fontWeight: 700, fontSize: 15, margin: "0 0 12px" }}>A completely different experience for every person.</p>
         {/* Product strip */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 40px 1fr", gap: 0, marginBottom: 16, alignItems: "center" }}>
-          <div style={{ background: "rgba(248,113,113,0.07)", borderRadius: 12, padding: "12px 16px", border: "1px solid rgba(248,113,113,0.22)", textAlign: "center" }}>
-            <div style={{ fontSize: 26, marginBottom: 4 }}>🧩</div>
-            <p style={{ color: "white", fontWeight: 800, fontSize: 14, marginBottom: 3 }}>Browser Extension</p>
-            <p style={{ color: "#94a3b8", fontSize: 12 }}>Catches fake and AI-generated content in real time — for everyone, as they browse.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 40px 1fr", gap: 0, marginBottom: 12, alignItems: "center" }}>
+          <div style={{ background: "rgba(248,113,113,0.07)", borderRadius: 12, padding: "10px 14px", border: "1px solid rgba(248,113,113,0.22)", textAlign: "center" }}>
+            <div style={{ fontSize: 22, marginBottom: 3 }}>🧩</div>
+            <p style={{ color: "white", fontWeight: 800, fontSize: 13, margin: "0 0 3px" }}>Browser Extension</p>
+            <p style={{ color: "#94a3b8", fontSize: 11, margin: 0 }}>Catches fake and AI-generated content in real time — for everyone, as they browse.</p>
           </div>
           <div style={{ textAlign: "center", color: "#334155", fontSize: 22, fontWeight: 900 }}>+</div>
-          <div style={{ background: "rgba(56,189,248,0.07)", borderRadius: 12, padding: "12px 16px", border: "1px solid rgba(56,189,248,0.22)", textAlign: "center" }}>
-            <div style={{ fontSize: 26, marginBottom: 4 }}>🎮</div>
-            <p style={{ color: "white", fontWeight: 800, fontSize: 14, marginBottom: 3 }}>Learning Experience</p>
-            <p style={{ color: "#94a3b8", fontSize: 12 }}>Tailored to each person's age — games for kids, drills for employees, simple guides for seniors.</p>
+          <div style={{ background: "rgba(56,189,248,0.07)", borderRadius: 12, padding: "10px 14px", border: "1px solid rgba(56,189,248,0.22)", textAlign: "center" }}>
+            <div style={{ fontSize: 22, marginBottom: 3 }}>🎮</div>
+            <p style={{ color: "white", fontWeight: 800, fontSize: 13, margin: "0 0 3px" }}>Learning Experience</p>
+            <p style={{ color: "#94a3b8", fontSize: 11, margin: 0 }}>Tailored to each person's age — games for kids, drills for employees, simple guides for seniors.</p>
           </div>
         </div>
         {/* Per-persona breakdown */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12, flex: 1 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10, flex: 1 }}>
           {[
             { Av: KidAvatar,    color: "#34d399", who: "Students",  ext: "Flags fakes in class chats.",          learn: "Games that feel like fun." },
             { Av: TeenAvatar,   color: "#60a5fa", who: "Teenagers", ext: "Catches manipulated social posts.",    learn: "'Would you share this?' challenges." },
             { Av: EmpAvatar,    color: "#f59e0b", who: "Employees", ext: "Detects phishing at work.",            learn: "Live drills. Battle-ready teams." },
             { Av: SeniorAvatar, color: "#f87171", who: "Seniors",   ext: "One-tap scam alert. Family notified.", learn: "Jargon-free. Large text. Simple." },
           ].map(({ Av, color, who, ext, learn }) => (
-            <div key={who} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 14, padding: "16px 12px", border: `1px solid ${color}30`, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 10 }}>
+            <div key={who} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 14, padding: "12px 10px", border: `1px solid ${color}30`, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 7 }}>
               <div style={{ borderRadius: "50%", overflow: "hidden", border: `2.5px solid ${color}66`, boxShadow: `0 0 14px ${color}33` }}>
-                <Av size={58} color={color} />
+                <Av size={52} color={color} />
               </div>
-              <p style={{ color, fontWeight: 900, fontSize: 13 }}>{who}</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}>
-                <div style={{ background: "rgba(248,113,113,0.08)", borderRadius: 8, padding: "7px 10px", border: "1px solid rgba(248,113,113,0.18)" }}>
-                  <p style={{ color: "#fca5a5", fontSize: 9, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>🧩 EXTENSION</p>
-                  <p style={{ color: "#cbd5e1", fontSize: 11, lineHeight: 1.4 }}>{ext}</p>
+              <p style={{ color, fontWeight: 900, fontSize: 12, margin: 0 }}>{who}</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 5, width: "100%" }}>
+                <div style={{ background: "rgba(248,113,113,0.08)", borderRadius: 8, padding: "6px 8px", border: "1px solid rgba(248,113,113,0.18)" }}>
+                  <p style={{ color: "#fca5a5", fontSize: 9, fontWeight: 700, letterSpacing: 1, margin: "0 0 2px" }}>🧩 EXTENSION</p>
+                  <p style={{ color: "#cbd5e1", fontSize: 10, lineHeight: 1.4, margin: 0 }}>{ext}</p>
                 </div>
-                <div style={{ background: "rgba(56,189,248,0.08)", borderRadius: 8, padding: "7px 10px", border: `1px solid ${color}25` }}>
-                  <p style={{ color, fontSize: 9, fontWeight: 700, letterSpacing: 1, marginBottom: 3 }}>🎮 LEARNING</p>
-                  <p style={{ color: "#cbd5e1", fontSize: 11, lineHeight: 1.4 }}>{learn}</p>
+                <div style={{ background: "rgba(56,189,248,0.08)", borderRadius: 8, padding: "6px 8px", border: `1px solid ${color}25` }}>
+                  <p style={{ color, fontSize: 9, fontWeight: 700, letterSpacing: 1, margin: "0 0 2px" }}>🎮 LEARNING</p>
+                  <p style={{ color: "#cbd5e1", fontSize: 10, lineHeight: 1.4, margin: 0 }}>{learn}</p>
                 </div>
               </div>
             </div>
@@ -335,7 +336,7 @@ const slides = [
         { age: "Ages 65+", label: "High-Stakes, Underserved", pain: "$4.8B lost to fraud annually", solution: "Large-text interface · Family monitoring", color: DANGER },
       ];
       return (
-        <SlideShell badge="Target Market" title="Four Segments. One Platform." subtitle="~130M U.S. households · $95.7B digital education market by 2030 (CAGR 24.2%)" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#130a1e)">
+        <SlideShell badge="Target Market" title="Four Segments. One Platform." subtitle="~130M U.S. households · $95.7B digital education market by 2030 (CAGR 24.2%)" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#130a1e)" h={500}>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
             {segments.map((s, i) => (
               <div key={s.label} style={{ background: "rgba(255,255,255,0.04)", borderRadius: 12, overflow: "hidden", border: `1px solid ${s.color}44`, display: "flex", flexDirection: "column" }}>
@@ -375,7 +376,7 @@ const slides = [
         { name: "🔍 TruthLens",         aud: "All Ages (8–65+)", edu: true,  detect: true,  fam: true,  ages: true,  hl: true  },
       ];
       return (
-        <SlideShell badge="Competitive Landscape" title="No One Does What We Do" subtitle="Every competitor solves a fragment. TruthLens solves the whole." accent={AMBER} bg="linear-gradient(160deg,#0a0f1e,#1a1200)">
+        <SlideShell badge="Competitive Landscape" title="No One Does What We Do" subtitle="Every competitor solves a fragment. TruthLens solves the whole." accent={AMBER} bg="linear-gradient(160deg,#0a0f1e,#1a1200)" h={480}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
             <thead>
               <tr style={{ borderBottom: "1px solid #334155" }}>
@@ -409,7 +410,7 @@ const slides = [
   {
     label: "Business Model",
     content: () => (
-      <SlideShell badge="Business Model" title="Freemium + B2B2C Hybrid" subtitle="Free tier drives adoption · Five revenue streams diversify from day one" accent={GREEN} bg="linear-gradient(160deg,#0a0f1e,#071a0f)">
+      <SlideShell badge="Business Model" title="Freemium + B2B2C Hybrid" subtitle="Free tier drives adoption · Five revenue streams diversify from day one" accent={GREEN} bg="linear-gradient(160deg,#0a0f1e,#071a0f)" h={510}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
           {[
             { n: "🆓", title: "Free Tier", detail: "$0 · 1 age group module + browser extension limited to 10 scans/day · Conversion funnel into paid plans", tag: "Always On", color: "#94a3b8" },
@@ -440,7 +441,7 @@ const slides = [
   {
     label: "Financials",
     content: () => (
-      <SlideShell badge="Financial Projections" title="Path to $13.1M Revenue by Year 3" subtitle="Conservative bottom-up model · Break-even reached in Year 2" accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061830)">
+      <SlideShell badge="Financial Projections" title="Path to $13.1M Revenue by Year 3" subtitle="Conservative bottom-up model · Break-even reached in Year 2" accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061830)" h={500}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
           {[
             { year: "Year 1", rev: "$600K", subs: "5,000 subscribers", profit: "($1.2M) net loss", color: DANGER, tag: "Seed Stage" },
@@ -488,7 +489,7 @@ const slides = [
   {
     label: "Investment",
     content: () => (
-      <SlideShell badge="Investment Ask" title="Raising $2M Seed Round" subtitle="18 months of runway · Cash-flow positive by Month 18 without a Series A" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#12071e)">
+      <SlideShell badge="Investment Ask" title="Raising $2M Seed Round" subtitle="18 months of runway · Cash-flow positive by Month 18 without a Series A" accent={PURPLE} bg="linear-gradient(160deg,#0a0f1e,#12071e)" h={490}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
           {[
             { icon: "⚙️", use: "Product Development", amount: "$900K", pct: "45%", desc: "AI detection engine, mobile app, browser extension", color: ACCENT },
@@ -521,7 +522,7 @@ const slides = [
   {
     label: "Team",
     content: () => (
-      <SlideShell badge="The Team" title="Built to Execute" subtitle="Five founders. Five domains. One mission." accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061830)">
+      <SlideShell badge="The Team" title="Built to Execute" subtitle="Five founders. Five domains. One mission." accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061830)" h={490}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 14 }}>
           {[
             { role: "CEO", domain: "Strategy & Vision", desc: "Leads business strategy, investor relations & partnerships", color: ACCENT, icon: "🧭" },
@@ -551,11 +552,11 @@ const slides = [
   {
     label: "Conclusion",
     content: () => (
-      <div style={{ height: SLIDE_H, background: "linear-gradient(135deg,#020817 0%,#0c1a35 50%,#0e3554 100%)", display: "flex", flexDirection: "column", padding: "28px 36px 24px", position: "relative", overflow: "hidden" }}>
+      <div style={{ height: 510, background: "linear-gradient(135deg,#020817 0%,#0c1a35 50%,#0e3554 100%)", display: "flex", flexDirection: "column", padding: "20px 32px 16px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle,rgba(56,189,248,0.06),transparent 70%)", bottom: -80, right: -80, pointerEvents: "none" }} />
-        <span style={{ color: ACCENT, fontWeight: 700, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", marginBottom: 6 }}>Conclusion & Call to Action</span>
-        <h2 style={{ color: "white", fontWeight: 800, fontSize: 26, margin: "0 0 16px", lineHeight: 1.3 }}>Everyone Deserves to Know What's Real.</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
+        <span style={{ color: ACCENT, fontWeight: 700, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", marginBottom: 4 }}>Conclusion & Call to Action</span>
+        <h2 style={{ color: "white", fontWeight: 800, fontSize: 24, margin: "0 0 12px", lineHeight: 1.3 }}>Everyone Deserves to Know What's Real.</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 10 }}>
           {[
             { icon: "📊", stat: "$95B", label: "Market opportunity", sub: "Growing at 24.2% CAGR through 2030" },
             { icon: "🏆", stat: "0", label: "Direct all-in-one competitors", sub: "First mover in an uncontested category" },
@@ -569,7 +570,7 @@ const slides = [
             </div>
           ))}
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 10 }}>
           {[
             { who: "💼 Investors", cta: "Raising $2M seed · Let's walk through the full roadmap", color: ACCENT },
             { who: "🏫 Schools", cta: "Free semester pilot · No budget approval · No IT headache", color: GREEN },
@@ -622,7 +623,7 @@ export default function PitchDeck() {
       </div>
 
       {/* Slide */}
-      <div style={{ width: "100%", maxWidth: 840, borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", height: SLIDE_H, border: "1px solid rgba(255,255,255,0.07)" }}>
+      <div style={{ width: "100%", maxWidth: 840, borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", height: SLIDE_HEIGHTS[cur], border: "1px solid rgba(255,255,255,0.07)" }}>
         <Slide />
       </div>
 
