@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 const ACCENT = "#38bdf8";
@@ -592,10 +592,121 @@ const slides = [
 
 export default function PitchDeck() {
   const [cur, setCur] = useState(0);
+  const [navStyle, setNavStyle] = useState(0); // 0=Classic  1=Pill  2=Minimal
+  const [printing, setPrinting] = useState(false);
+
+  const prev = () => setCur(c => Math.max(0, c - 1));
+  const next = () => setCur(c => Math.min(slides.length - 1, c + 1));
+
+  // PDF export: render all slides, then trigger browser print dialog
+  useEffect(() => {
+    if (!printing) return;
+    const id = setTimeout(() => {
+      window.print();
+      window.addEventListener("afterprint", () => setPrinting(false), { once: true });
+    }, 200);
+    return () => clearTimeout(id);
+  }, [printing]);
+
+  // ── Dot progress indicator (shared across nav styles) ──────────────────────
+  const Dots = () => (
+    <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+      {slides.map((_, i) => (
+        <div key={i} onClick={() => setCur(i)}
+          style={{ width: i === cur ? 22 : 6, height: 6, borderRadius: 3, background: i === cur ? ACCENT : "#1e293b", cursor: "pointer", transition: "all 0.3s" }} />
+      ))}
+    </div>
+  );
+
+  // ── Three nav styles ───────────────────────────────────────────────────────
+  const navDefs = [
+    {
+      id: 0, label: "Classic", preview: "[ ← ]  ●  [ → ]",
+      render: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 16 }}>
+          <button onClick={prev} disabled={cur === 0}
+            style={{ background: cur === 0 ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.08)", color: cur === 0 ? "#1e293b" : "white", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 22px", cursor: cur === 0 ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.2s" }}>
+            ← Prev
+          </button>
+          <Dots />
+          <button onClick={next} disabled={cur === slides.length - 1}
+            style={{ background: cur === slides.length - 1 ? "rgba(255,255,255,0.02)" : "linear-gradient(135deg,#0ea5e9,#6366f1)", color: cur === slides.length - 1 ? "#1e293b" : "white", border: "none", borderRadius: 8, padding: "8px 22px", cursor: cur === slides.length - 1 ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.2s" }}>
+            Next →
+          </button>
+        </div>
+      ),
+    },
+    {
+      id: 1, label: "Pill", preview: "(  ‹  )  ●  (  ›  )",
+      render: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 18 }}>
+          <button onClick={prev} disabled={cur === 0}
+            style={{ background: cur === 0 ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.07)", color: cur === 0 ? "#1e293b" : "#e2e8f0", border: `1px solid ${cur === 0 ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.15)"}`, borderRadius: 40, width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", cursor: cur === 0 ? "not-allowed" : "pointer", fontSize: 22, lineHeight: 1, transition: "all 0.2s" }}>
+            ‹
+          </button>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+            <Dots />
+            <span style={{ color: "#334155", fontSize: 11 }}>{cur + 1} / {slides.length}</span>
+          </div>
+          <button onClick={next} disabled={cur === slides.length - 1}
+            style={{ background: cur === slides.length - 1 ? "rgba(255,255,255,0.03)" : "linear-gradient(135deg,#38bdf8,#818cf8)", color: cur === slides.length - 1 ? "#1e293b" : "white", border: "none", borderRadius: 40, width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", cursor: cur === slides.length - 1 ? "not-allowed" : "pointer", fontSize: 22, lineHeight: 1, boxShadow: cur === slides.length - 1 ? "none" : "0 4px 20px rgba(56,189,248,0.3)", transition: "all 0.2s" }}>
+            ›
+          </button>
+        </div>
+      ),
+    },
+    {
+      id: 2, label: "Minimal", preview: "←  · · · ·  →",
+      render: () => (
+        <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 16 }}>
+          <button onClick={prev} disabled={cur === 0}
+            style={{ background: "none", color: cur === 0 ? "#1e293b" : "#475569", border: "none", padding: "4px 2px", cursor: cur === 0 ? "not-allowed" : "pointer", fontSize: 20, lineHeight: 1 }}>
+            ←
+          </button>
+          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+            {slides.map((_, i) => (
+              <div key={i} onClick={() => setCur(i)}
+                style={{ width: i === cur ? 16 : 4, height: 4, borderRadius: 2, background: i === cur ? ACCENT : "#1e293b", cursor: "pointer", transition: "all 0.3s" }} />
+            ))}
+          </div>
+          <button onClick={next} disabled={cur === slides.length - 1}
+            style={{ background: "none", color: cur === slides.length - 1 ? "#1e293b" : "#475569", border: "none", padding: "4px 2px", cursor: cur === slides.length - 1 ? "not-allowed" : "pointer", fontSize: 20, lineHeight: 1 }}>
+            →
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   const Slide = slides[cur].content;
 
+  // ── Print / PDF view ───────────────────────────────────────────────────────
+  if (printing) {
+    return (
+      <>
+        <style>{`
+          @media print {
+            @page { size: A4 landscape; margin: 0; }
+            body { margin: 0; background: #020617 !important; }
+            .tl-pslide { page-break-after: always; break-after: page; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .tl-pslide:last-child { page-break-after: avoid; break-after: avoid; }
+          }
+          .tl-pslide { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        `}</style>
+        <div style={{ background: "#020617" }}>
+          {slides.map((s, i) => {
+            const S = s.content;
+            return <div key={i} className="tl-pslide"><S /></div>;
+          })}
+        </div>
+      </>
+    );
+  }
+
+  // ── Normal interactive view ────────────────────────────────────────────────
   return (
     <div style={{ fontFamily: "'Inter',system-ui,sans-serif", background: "#020617", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 16px" }}>
+
       {/* Top bar */}
       <div style={{ width: "100%", maxWidth: 840, marginBottom: 12 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
@@ -613,7 +724,8 @@ export default function PitchDeck() {
         {/* Tab nav */}
         <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
           {slides.map((s, i) => (
-            <button key={i} onClick={() => setCur(i)} style={{ background: i === cur ? "linear-gradient(135deg,#0ea5e9,#6366f1)" : "rgba(255,255,255,0.04)", color: i === cur ? "white" : "#475569", border: "1px solid " + (i === cur ? "transparent" : "rgba(255,255,255,0.06)"), borderRadius: 6, padding: "4px 12px", fontSize: 11, cursor: "pointer", fontWeight: i === cur ? 700 : 400, transition: "all 0.2s" }}>
+            <button key={i} onClick={() => setCur(i)}
+              style={{ background: i === cur ? "linear-gradient(135deg,#0ea5e9,#6366f1)" : "rgba(255,255,255,0.04)", color: i === cur ? "white" : "#475569", border: "1px solid " + (i === cur ? "transparent" : "rgba(255,255,255,0.06)"), borderRadius: 6, padding: "4px 12px", fontSize: 11, cursor: "pointer", fontWeight: i === cur ? 700 : 400, transition: "all 0.2s" }}>
               {s.label}
             </button>
           ))}
@@ -625,15 +737,28 @@ export default function PitchDeck() {
         <Slide />
       </div>
 
-      {/* Nav */}
-      <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 16 }}>
-        <button onClick={() => setCur(Math.max(0, cur - 1))} disabled={cur === 0} style={{ background: cur === 0 ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.08)", color: cur === 0 ? "#1e293b" : "white", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 22px", cursor: cur === 0 ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 600 }}>← Prev</button>
-        <div style={{ display: "flex", gap: 5 }}>
-          {slides.map((_, i) => (
-            <div key={i} onClick={() => setCur(i)} style={{ width: i === cur ? 22 : 6, height: 6, borderRadius: 3, background: i === cur ? ACCENT : "#1e293b", cursor: "pointer", transition: "all 0.3s" }} />
+      {/* Prev / Next nav — current style */}
+      {navDefs[navStyle].render()}
+
+      {/* ── Controls row: nav style switcher + PDF export ─────────────────── */}
+      <div style={{ width: "100%", maxWidth: 840, display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14 }}>
+
+        {/* Style switcher */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ color: "#334155", fontSize: 11, marginRight: 2 }}>Nav:</span>
+          {navDefs.map(n => (
+            <button key={n.id} onClick={() => setNavStyle(n.id)}
+              style={{ background: navStyle === n.id ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.03)", color: navStyle === n.id ? ACCENT : "#475569", border: `1px solid ${navStyle === n.id ? "rgba(56,189,248,0.35)" : "rgba(255,255,255,0.06)"}`, borderRadius: 6, padding: "4px 12px", fontSize: 11, cursor: "pointer", fontWeight: navStyle === n.id ? 700 : 400, transition: "all 0.15s" }}>
+              {n.label}
+            </button>
           ))}
         </div>
-        <button onClick={() => setCur(Math.min(slides.length - 1, cur + 1))} disabled={cur === slides.length - 1} style={{ background: cur === slides.length - 1 ? "rgba(255,255,255,0.02)" : "linear-gradient(135deg,#0ea5e9,#6366f1)", color: cur === slides.length - 1 ? "#1e293b" : "white", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "8px 22px", cursor: cur === slides.length - 1 ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 600 }}>Next →</button>
+
+        {/* PDF export */}
+        <button onClick={() => setPrinting(true)}
+          style={{ background: "linear-gradient(135deg,#0ea5e9,#6366f1)", color: "white", border: "none", borderRadius: 8, padding: "7px 18px", fontSize: 12, cursor: "pointer", fontWeight: 700, display: "flex", alignItems: "center", gap: 6, boxShadow: "0 4px 16px rgba(14,165,233,0.3)" }}>
+          📄 Export PDF
+        </button>
       </div>
 
       {/* Footer */}
