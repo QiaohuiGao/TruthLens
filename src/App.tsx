@@ -421,7 +421,7 @@ const slides = [
     content: () => (
       <SlideShell badge="The Team" title="Built to Execute" subtitle="Five founders. Five domains. One mission." accent={ACCENT} bg="linear-gradient(160deg,#0a0f1e,#061830)">
         <div style={{ marginBottom: 14, borderRadius: 14, overflow: "hidden", border: "1px solid rgba(56,189,248,0.2)", boxShadow: "0 12px 30px rgba(0,0,0,0.25)" }}>
-          <img src="/team-photo.png" alt="TruthLens team" style={{ width: "100%", height: "230px", objectFit: "cover", display: "block" }} />
+          <img src="/team-photo.png" alt="TruthLens team" style={{ width: "100%", height: "160px", objectFit: "cover", display: "block" }} />
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 14 }}>
           {[
