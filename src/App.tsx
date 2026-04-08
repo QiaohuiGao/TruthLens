@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 
 const ACCENT = "#38bdf8";
@@ -493,29 +493,40 @@ const slides = [
 ];
 
 export default function PitchDeck() {
-  const [cur, setCur] = useState(0);
-  const [navStyle, setNavStyle] = useState(0); // 0=Classic  1=Pill  2=Minimal
+  const [cur, setCur]         = useState(0);
+  const [navStyle, setNavStyle] = useState(1); // 0=Classic  1=Pill  2=Minimal
   const [printing, setPrinting] = useState(false);
-  const [zoom, setZoom] = useState(1);
-  const pageRef = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom]       = useState(1);
+  const pageRef    = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const prev = () => setCur(c => Math.max(0, c - 1));
   const next = () => setCur(c => Math.min(slides.length - 1, c + 1));
 
-  // Responsive zoom: scale the 840px layout to fit any screen width
-  useEffect(() => {
+  // Fit to BOTH width and height — runs synchronously before paint to avoid flicker
+  useLayoutEffect(() => {
     const update = () => {
-      const page = pageRef.current;
-      if (!page) return;
-      const availW = page.offsetWidth - 32; // subtract 16px padding each side
-      setZoom(Math.min(1, availW / 840));
+      const page    = pageRef.current;
+      const content = contentRef.current;
+      if (!page || !content) return;
+
+      const availW = page.offsetWidth - 32;   // 16px padding each side
+      const availH = window.innerHeight - 40; // 20px padding top+bottom
+
+      // Temporarily reset zoom to measure true natural height
+      content.style.zoom = "1";
+      const naturalH = content.scrollHeight;
+
+      const z = Math.min(1, availW / 840, availH / naturalH);
+      content.style.zoom = String(z);
+      setZoom(z);
     };
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
-  }, []);
+  }, [cur]); // re-measure on slide change (each slide has different height)
 
-  // PDF export: render all slides, then trigger browser print dialog
+  // PDF export
   useEffect(() => {
     if (!printing) return;
     const id = setTimeout(() => {
@@ -525,7 +536,7 @@ export default function PitchDeck() {
     return () => clearTimeout(id);
   }, [printing]);
 
-  // ── Dot progress indicator (shared across nav styles) ──────────────────────
+  // ── Dots ──────────────────────────────────────────────────────────────────
   const Dots = () => (
     <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
       {slides.map((_, i) => (
@@ -535,73 +546,48 @@ export default function PitchDeck() {
     </div>
   );
 
-  // ── Three nav styles ───────────────────────────────────────────────────────
-  const navDefs = [
-    {
-      id: 0, label: "Classic", preview: "[ ← ]  ●  [ → ]",
-      render: () => (
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 16 }}>
-          <button onClick={prev} disabled={cur === 0}
-            style={{ background: cur === 0 ? "rgba(255,255,255,0.02)" : "rgba(255,255,255,0.08)", color: cur === 0 ? "#1e293b" : "white", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "8px 22px", cursor: cur === 0 ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.2s" }}>
-            ← Prev
-          </button>
-          <Dots />
-          <button onClick={next} disabled={cur === slides.length - 1}
-            style={{ background: cur === slides.length - 1 ? "rgba(255,255,255,0.02)" : "linear-gradient(135deg,#0ea5e9,#6366f1)", color: cur === slides.length - 1 ? "#1e293b" : "white", border: "none", borderRadius: 8, padding: "8px 22px", cursor: cur === slides.length - 1 ? "not-allowed" : "pointer", fontSize: 13, fontWeight: 600, transition: "all 0.2s" }}>
-            Next →
-          </button>
-        </div>
-      ),
-    },
-    {
-      id: 1, label: "Pill", preview: "(  ‹  )  ●  (  ›  )",
-      render: () => (
-        <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 18 }}>
-          <button onClick={prev} disabled={cur === 0}
-            style={{ background: cur === 0 ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.07)", color: cur === 0 ? "#1e293b" : "#e2e8f0", border: `1px solid ${cur === 0 ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.15)"}`, borderRadius: 40, width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", cursor: cur === 0 ? "not-allowed" : "pointer", fontSize: 22, lineHeight: 1, transition: "all 0.2s" }}>
-            ‹
-          </button>
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-            <Dots />
-            <span style={{ color: "#334155", fontSize: 11 }}>{cur + 1} / {slides.length}</span>
-          </div>
-          <button onClick={next} disabled={cur === slides.length - 1}
-            style={{ background: cur === slides.length - 1 ? "rgba(255,255,255,0.03)" : "linear-gradient(135deg,#38bdf8,#818cf8)", color: cur === slides.length - 1 ? "#1e293b" : "white", border: "none", borderRadius: 40, width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", cursor: cur === slides.length - 1 ? "not-allowed" : "pointer", fontSize: 22, lineHeight: 1, boxShadow: cur === slides.length - 1 ? "none" : "0 4px 20px rgba(56,189,248,0.3)", transition: "all 0.2s" }}>
-            ›
-          </button>
-        </div>
-      ),
-    },
-    {
-      id: 2, label: "Minimal", preview: "←  · · · ·  →",
-      render: () => (
-        <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 16 }}>
-          <button onClick={prev} disabled={cur === 0}
-            style={{ background: "none", color: cur === 0 ? "#1e293b" : "#475569", border: "none", padding: "4px 2px", cursor: cur === 0 ? "not-allowed" : "pointer", fontSize: 20, lineHeight: 1 }}>
-            ←
-          </button>
-          <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
-            {slides.map((_, i) => (
-              <div key={i} onClick={() => setCur(i)}
-                style={{ width: i === cur ? 16 : 4, height: 4, borderRadius: 2, background: i === cur ? ACCENT : "#1e293b", cursor: "pointer", transition: "all 0.3s" }} />
-            ))}
-          </div>
-          <button onClick={next} disabled={cur === slides.length - 1}
-            style={{ background: "none", color: cur === slides.length - 1 ? "#1e293b" : "#475569", border: "none", padding: "4px 2px", cursor: cur === slides.length - 1 ? "not-allowed" : "pointer", fontSize: 20, lineHeight: 1 }}>
-            →
-          </button>
-        </div>
-      ),
-    },
+  // ── Side-button appearance per nav style ──────────────────────────────────
+  const btnBase: React.CSSProperties = {
+    flexShrink: 0, fontSize: 22, lineHeight: "1", transition: "all 0.2s",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    width: 46, height: 46,
+  };
+  const sideBtn = (disabled: boolean, isNext: boolean): React.CSSProperties => {
+    if (navStyle === 0) return { // Classic — rounded rect
+      ...btnBase,
+      background: disabled ? "rgba(255,255,255,0.02)" : isNext ? "linear-gradient(135deg,#0ea5e9,#6366f1)" : "rgba(255,255,255,0.08)",
+      color: disabled ? "#1e293b" : "white",
+      border: "1px solid rgba(255,255,255,0.1)",
+      borderRadius: 10,
+      cursor: disabled ? "not-allowed" : "pointer",
+    };
+    if (navStyle === 1) return { // Pill — circle with glow
+      ...btnBase,
+      background: disabled ? "rgba(255,255,255,0.03)" : isNext ? "linear-gradient(135deg,#38bdf8,#818cf8)" : "rgba(255,255,255,0.07)",
+      color: disabled ? "#1e293b" : isNext ? "white" : "#e2e8f0",
+      border: `1px solid ${disabled ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.18)"}`,
+      borderRadius: 40,
+      boxShadow: (!disabled && isNext) ? "0 4px 20px rgba(56,189,248,0.35)" : "none",
+      cursor: disabled ? "not-allowed" : "pointer",
+    };
+    return { // Minimal — no background
+      ...btnBase,
+      background: "none", border: "none",
+      color: disabled ? "#1e293b" : "#475569",
+      cursor: disabled ? "not-allowed" : "pointer",
+      width: 36, height: 36,
+    };
+  };
+
+  const navStyleDefs = [
+    { id: 0, label: "Classic" },
+    { id: 1, label: "Pill" },
+    { id: 2, label: "Minimal" },
   ];
 
   const Slide = slides[cur].content;
 
-  // ── Print / PDF view ───────────────────────────────────────────────────────
-  // Letter landscape = 11in × 8.5in. At 96 dpi → 1056 × 816px.
-  // Slides render at maxWidth 840px → zoom factor 1056/840 ≈ 1.257 fills width.
-  // overflow:hidden clips anything taller than 816px; shorter slides are padded
-  // by the page container rather than leaving blank A4 gaps.
+  // ── Print view ─────────────────────────────────────────────────────────────
   if (printing) {
     return (
       <>
@@ -610,12 +596,8 @@ export default function PitchDeck() {
             @page { size: letter landscape; margin: 0; }
             html, body { margin: 0; padding: 0; background: #020617 !important; }
             .tl-pslide {
-              width: 11in;
-              height: 8.5in;
-              overflow: hidden;
-              page-break-after: always;
-              break-after: page;
-              box-sizing: border-box;
+              width: 11in; height: 8.5in; overflow: hidden;
+              page-break-after: always; break-after: page; box-sizing: border-box;
             }
             .tl-pslide:last-child { page-break-after: avoid; break-after: avoid; }
             .tl-pinner {
@@ -627,26 +609,20 @@ export default function PitchDeck() {
           .tl-pinner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         `}</style>
         <div style={{ background: "#020617" }}>
-          {slides.map((s, i) => {
-            const S = s.content;
-            return (
-              <div key={i} className="tl-pslide">
-                <div className="tl-pinner"><S /></div>
-              </div>
-            );
-          })}
+          {slides.map((s, i) => { const S = s.content; return (
+            <div key={i} className="tl-pslide"><div className="tl-pinner"><S /></div></div>
+          ); })}
         </div>
       </>
     );
   }
 
-  // ── Normal interactive view ────────────────────────────────────────────────
+  // ── Interactive view ───────────────────────────────────────────────────────
   return (
-    // pageRef measures available width for zoom calculation
-    <div ref={pageRef} style={{ fontFamily: "'Inter',system-ui,sans-serif", background: "#020617", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 16px" }}>
+    <div ref={pageRef} style={{ fontFamily: "'Inter',system-ui,sans-serif", background: "#020617", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 16px", boxSizing: "border-box" }}>
 
-      {/* Everything inside is 840px wide, scaled uniformly by zoom */}
-      <div style={{ width: 840, zoom } as React.CSSProperties}>
+      {/* 840px content box — zoom scales it to fit both width & height */}
+      <div ref={contentRef} style={{ width: 840, zoom } as React.CSSProperties}>
 
         {/* Top bar */}
         <div style={{ marginBottom: 12 }}>
@@ -662,7 +638,6 @@ export default function PitchDeck() {
               <span style={{ color: "#334155", fontSize: 12 }}>{cur + 1} / {slides.length}</span>
             </div>
           </div>
-          {/* Tab nav */}
           <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
             {slides.map((s, i) => (
               <button key={i} onClick={() => setCur(i)}
@@ -673,19 +648,32 @@ export default function PitchDeck() {
           </div>
         </div>
 
-        {/* Slide */}
-        <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", border: "1px solid rgba(255,255,255,0.07)" }}>
-          <Slide />
+        {/* ── Slide with side buttons ───────────────────────────────────────── */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+
+          {/* Prev button */}
+          <button onClick={prev} disabled={cur === 0} style={sideBtn(cur === 0, false)}>‹</button>
+
+          {/* Slide frame */}
+          <div style={{ flex: 1, borderRadius: 16, overflow: "hidden", boxShadow: "0 30px 80px rgba(0,0,0,0.7)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <Slide />
+          </div>
+
+          {/* Next button */}
+          <button onClick={next} disabled={cur === slides.length - 1} style={sideBtn(cur === slides.length - 1, true)}>›</button>
+
         </div>
 
-        {/* Prev / Next nav — current style */}
-        {navDefs[navStyle].render()}
+        {/* Dots indicator */}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 12 }}>
+          <Dots />
+        </div>
 
-        {/* Controls row: nav style switcher + PDF export */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14 }}>
+        {/* Controls: nav style switcher + PDF export */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ color: "#334155", fontSize: 11, marginRight: 2 }}>Nav:</span>
-            {navDefs.map(n => (
+            {navStyleDefs.map(n => (
               <button key={n.id} onClick={() => setNavStyle(n.id)}
                 style={{ background: navStyle === n.id ? "rgba(56,189,248,0.1)" : "rgba(255,255,255,0.03)", color: navStyle === n.id ? ACCENT : "#475569", border: `1px solid ${navStyle === n.id ? "rgba(56,189,248,0.35)" : "rgba(255,255,255,0.06)"}`, borderRadius: 6, padding: "4px 12px", fontSize: 11, cursor: "pointer", fontWeight: navStyle === n.id ? 700 : 400, transition: "all 0.15s" }}>
                 {n.label}
@@ -699,7 +687,7 @@ export default function PitchDeck() {
         </div>
 
         {/* Footer */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 14, padding: "8px 4px", borderTop: "1px solid #0f172a" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 12, padding: "8px 4px", borderTop: "1px solid #0f172a" }}>
           <span style={{ color: "#1e293b", fontSize: 11 }}>© 2026 TruthLens Inc. All rights reserved.</span>
           <span style={{ color: "#1e293b", fontSize: 11 }}>Confidential & Proprietary · Not for Distribution</span>
           <span style={{ color: "#1e293b", fontSize: 11 }}>hello@truthlens.io</span>
