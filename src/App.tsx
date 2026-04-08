@@ -681,22 +681,42 @@ export default function PitchDeck() {
   const Slide = slides[cur].content;
 
   // ── Print / PDF view ───────────────────────────────────────────────────────
+  // Letter landscape = 11in × 8.5in. At 96 dpi → 1056 × 816px.
+  // Slides render at maxWidth 840px → zoom factor 1056/840 ≈ 1.257 fills width.
+  // overflow:hidden clips anything taller than 816px; shorter slides are padded
+  // by the page container rather than leaving blank A4 gaps.
   if (printing) {
     return (
       <>
         <style>{`
           @media print {
-            @page { size: A4 landscape; margin: 0; }
-            body { margin: 0; background: #020617 !important; }
-            .tl-pslide { page-break-after: always; break-after: page; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            @page { size: letter landscape; margin: 0; }
+            html, body { margin: 0; padding: 0; background: #020617 !important; }
+            .tl-pslide {
+              width: 11in;
+              height: 8.5in;
+              overflow: hidden;
+              page-break-after: always;
+              break-after: page;
+              box-sizing: border-box;
+            }
             .tl-pslide:last-child { page-break-after: avoid; break-after: avoid; }
+            .tl-pinner {
+              zoom: 1.257;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
           }
-          .tl-pslide { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          .tl-pinner { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         `}</style>
         <div style={{ background: "#020617" }}>
           {slides.map((s, i) => {
             const S = s.content;
-            return <div key={i} className="tl-pslide"><S /></div>;
+            return (
+              <div key={i} className="tl-pslide">
+                <div className="tl-pinner"><S /></div>
+              </div>
+            );
           })}
         </div>
       </>
