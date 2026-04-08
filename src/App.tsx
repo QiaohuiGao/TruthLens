@@ -118,7 +118,7 @@ const slides = [
                 <Av size={60} color={color} />
               </div>
               <p style={{ color, fontSize: 12, fontWeight: 800 }}>{who}</p>
-              <p style={{ color: "#475569", fontSize: 10 }}>{age}</p>
+              <p style={{ color: "#94a3b8", fontSize: 10 }}>{age}</p>
             </div>
           ))}
         </div>
@@ -126,10 +126,10 @@ const slides = [
         {/* Team names */}
         <div style={{ display: "flex", flexWrap: "nowrap", justifyContent: "center", gap: 6, marginBottom: 16 }}>
           {["Michael Seddoh", "Pranav Waghmare", "Qiaohui Gao", "Soumya Singh", "Vaishnavi Kulkarni"].map(n => (
-            <span key={n} style={{ background: "rgba(125,211,252,0.08)", color: "#bae6fd", borderRadius: 20, padding: "4px 11px", fontSize: 10.5, border: "1px solid rgba(125,211,252,0.2)", whiteSpace: "nowrap" }}>{n}</span>
+            <span key={n} style={{ background: "rgba(125,211,252,0.12)", color: "#e2e8f0", borderRadius: 20, padding: "4px 11px", fontSize: 10.5, border: "1px solid rgba(125,211,252,0.35)", whiteSpace: "nowrap" }}>{n}</span>
           ))}
         </div>
-        <p style={{ color: "#334155", fontSize: 11, letterSpacing: 1.2 }}>INFO 7385 · NORTHEASTERN UNIVERSITY · SPRING 2026</p>
+        <p style={{ color: "#64748b", fontSize: 11, letterSpacing: 1.2 }}>INFO 7385 · NORTHEASTERN UNIVERSITY · SPRING 2026</p>
       </div>
     )
   },
