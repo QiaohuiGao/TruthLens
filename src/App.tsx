@@ -443,9 +443,6 @@ const slides = [
             </div>
           ))}
         </div>
-        <div style={{ background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.15)", borderRadius: 10, padding: "10px 16px", textAlign: "center" }}>
-          <p style={{ color: "#7dd3fc", fontSize: 13, margin: 0 }}>🎓 <strong>Northeastern University</strong> · INFO 7385: Managerial Communication for Engineers · Spring 2026</p>
-        </div>
       </SlideShell>
     )
   },
