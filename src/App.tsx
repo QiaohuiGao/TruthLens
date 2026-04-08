@@ -680,10 +680,7 @@ export default function PitchDeck() {
               </button>
             ))}
           </div>
-          <button onClick={() => setPrinting(true)}
-            style={{ background: "linear-gradient(135deg,#0ea5e9,#6366f1)", color: "white", border: "none", borderRadius: 8, padding: "7px 18px", fontSize: 12, cursor: "pointer", fontWeight: 700, display: "flex", alignItems: "center", gap: 6, boxShadow: "0 4px 16px rgba(14,165,233,0.3)" }}>
-            📄 Export PDF
-          </button>
+          {/* PDF export button hidden temporarily */}
         </div>
 
         {/* Footer */}
